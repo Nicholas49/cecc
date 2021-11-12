@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Oscar Website">
+    <meta name="author" content="01as">
+
+    <link href="{% static 'cecc/quizthing.css' %}" rel="stylesheet">
+
+    <title>{% block title %}Quiz Thing{% endblock %}</title>
+
+    <center><h1>The People's Quiz Thing</h1></center>
+
+    <div class='boundary'>
+        <div id='signup' class="showbox">
+            <div onclick="expand2('signup')">
+                <h3 >Create Team</h3>
+            </div>
+            <form class="form-signin" method="POST" action="maketeam">
+                {% csrf_token %}
+                Team Name: {{ form.name }}<br>
+                Team Color: {{ form.kulr }}<br>
+                Password: {{ form.pswrd }}<br>
+                <p> </p>
+                <center>
+                    <button type="submit" value="Enter">Create</button>
+                </center>
+            </form>
+        </div>
+        <p></p>
+        <div id='login' class="showbox">
+            <div>
+                <h3 onclick="expand('login')">Log In</h3>
+            </div>
+            <center>
+                <form class="form-signin" method="POST" action="loginteam">
+                    {% csrf_token %}
+                    Team Name: {{ form.name }}<br>
+                    Password: {{ form.pswrd }}<br>
+                    <p> </p>
+                    <button type="submit" value="Enter">Enter</button>
+                </form>
+            </center>
+        </div>
+    </div>
+
+
+    <script>
+        function expand(evt){
+            document.getElementById(evt).classList.toggle('expanded')
+        }
+        function expand2(evt){
+            document.getElementById(evt).classList.toggle('expanded2')
+        }
+    </script>
+

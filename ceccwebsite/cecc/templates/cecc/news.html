@@ -1,0 +1,59 @@
+{% extends 'cecc/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div id="leftcontent">
+    <div class="section"><div>
+        <h1 class="ttext" class="NWCorner">Scheduled Events</h1>
+        <h2><strong>CECC 2017 Kountry Klub Summer Schedule </strong></h2>
+
+        {% for m in monthlist %}
+
+            <table id="calendert" style="table-layout:auto;">
+                <tr>
+                    <th colspan="3" style="border-radius: 15px 15px 0px 0px;">
+                        {{ m.month }}
+                        {% if m.month == 1 %}January{% endif %}
+                        {% if m.month == 2 %}February{% endif %}
+                        {% if m.month == 3 %}March{% endif %}
+                        {% if m.month == 4 %}April{% endif %}
+                        {% if m.month == 5 %}May{% endif %}
+                        {% if m.month == 6 %}June{% endif %}
+                        {% if m.month == 7 %}July{% endif %}
+                        {% if m.month == 8 %}August{% endif %}
+                        {% if m.month == 9 %}September{% endif %}
+                        {% if m.month == 10 %}October{% endif %}
+                        {% if m.month == 11 %}November{% endif %}
+                        {% if m.month == 12 %}December{% endif %}
+                    </th>
+                </tr>
+                {% for d in m.daylist %}
+                    <tr>
+                        <th class="calkey {% if forloop.revcounter == 1 %}SWCorner{% endif %}" style="width:20%; text-align: right">
+                            {{ d.dayno }}
+                            {% if d.weekday == "MON" %}Monday:{% endif %}
+                            {% if d.weekday == "TUE" %}Tuesday:{% endif %}
+                            {% if d.weekday == "WED" %}Wednesday:{% endif %}
+                            {% if d.weekday == "THU" %}Thursday:{% endif %}
+                            {% if d.weekday == "FRI" %}Friday:{% endif %}
+                        </th>
+                        <td {% if forloop.revcounter == 1 %}class="SECorner"{% endif %}>{{ d.event }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <p> </p>
+
+        {% endfor %}
+
+            <p>**If an activity falls on a day your child is not enrolled for and you would like your child to attend on any of the above days you may:</p>
+            <ol>
+                <li>pay $5 per child to switch a day that week, or</li>
+                <li>pay $20 per child to add that day to your week.</li>
+            </ol>
+            <p> </p>
+            <a type="button" class="btn btn-link" href="{% url 'addevent' %}">Add Event</a>
+    </div></div>
+</div>
+
+{% endblock %}

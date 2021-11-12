@@ -1,0 +1,17 @@
+{% extends 'oscarsapp/oscbase.html' %}
+{% load static %}
+
+{% block title %}Ballot Unavailable{% endblock %}
+
+    <!-- Custom styles for this template -->
+    {% block stylelinks %}<link href="{% static 'cecc/oscartheme.css' %}" rel="stylesheet">{% endblock %}
+
+    {% block content %}
+
+    <center>
+        <h1>Ballot Form Disabled</h1>
+        <h3>Ballots cannot be edited once the show has started.</h3>
+        <h4>If you have a valid reason you MUST edit your ballot, ask me very nicely and I'll change it for you.</h4>
+    </center>
+
+    {% endblock %}

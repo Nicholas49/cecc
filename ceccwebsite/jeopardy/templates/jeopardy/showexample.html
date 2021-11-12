@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jeopardy Game">
+    <meta name="author" content="01as">
+
+    <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
+    <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <link href="//db.onlinewebfonts.com/c/598f92f2bbb58a544a174b7c145ca599?family=ITC+Korinna+Std" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
+
+    <title>Jeopardy</title>
+
+    </head>
+    <body class='lightblue'>
+
+    <a href='http://01as.pythonanywhere.com/jeopardy/{{ jround }}/{{ game_name }}'>
+        <div class='back_button'>←</div>
+    </a>
+
+        <div style='text-align: center'>
+
+            <h3>{{ catname }}: example</h3>
+
+            <div>
+                <h2>{% autoescape off %}{{ answer }}{% endautoescape %}</h2>
+                <button type='button' onclick='revealResponse()' style='width: 80vw; max-width: 500px'>Show Question</button>
+            </div>
+
+            <div class='hidden' id='rr'>
+                <h2>{% autoescape off %}{{ question }}{% endautoescape %}</h2>
+            </div>
+
+
+        </div>
+
+
+  </body>
+</html>

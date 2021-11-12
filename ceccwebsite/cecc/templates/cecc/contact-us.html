@@ -1,0 +1,78 @@
+{% extends 'cecc/base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="leftcontent">
+    <div class="section">
+        <div>
+    <h1 class="ttext" style="color: #ffa">Contact Children's Edu-Care Centers</h1>
+<p>Our two locations are conveniently located off of Mid Rivers Mall Drive in St. Peters, MO.  Click on addresses to the right for detailed maps and directions. Fill out the form below if you would like more information or would like to schedule a tour with us. For the most accurate response, please include the age/s of your child/ren, if you are interested in full and/or half days, and how many days a week you are considering.   We look forward to hearing from you!</p>
+
+<center>
+<p>
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBkI0mUe0rTnpQd9V4pTq-V20GkU5_d5RY&callback=myMap'>
+    </script>
+    <div style='overflow:hidden;height:400px;width:520px;'>
+        <div id='gmap_canvas' style='height:400px;width:520px;'>
+        </div>
+    <style>#gmap_canvas img{max-width:none!important;background:none!important}</style>
+    </div>
+    <a href='https://www.embed-map.net/'>https://Embed-map.net</a>
+    <script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=54dec564d242df7ef974025fec7bdcaeac71606b'></script>
+    <script type='text/javascript'>function init_map(){var myOptions = {zoom:12,center:new google.maps.LatLng(38.7730776,-90.62125370000001),mapTypeId: google.maps.MapTypeId.ROADMAP};map = new google.maps.Map(document.getElementById('gmap_canvas'), myOptions);marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(38.7730776,-90.62125370000001)});infowindow = new google.maps.InfoWindow({content:'<strong>Children\'s Edu-Care Center</strong><br>100 Vantage Drive<br>63376 Saint Peters<br>'});google.maps.event.addListener(marker, 'click', function(){infowindow.open(map,marker);});infowindow.open(map,marker);}google.maps.event.addDomListener(window, 'load', init_map);</script>
+</p>
+</center>
+
+<script type="text/javascript">
+$(function() {$('.formBlockSurveyTable .tooltip_holder').tooltip({ track: true, delay: 0, showURL: false, fade: 250 });});
+</script>
+
+ <div class="formBlockSurveyTable">
+
+<form class="form-signin" method="POST" action="{% url 'contact' %}">
+{% csrf_token %}
+<table>
+    <tablebody>
+        <tr>
+            <td>
+                <div class="formBlockSurveyCell question">Name&nbsp;<span class="required">*</span></div>
+                {{ form.name }}
+            </td>
+            <td>
+                <div class="formBlockSurveyCell question">Phone</div>
+                {{ form.phone }}
+            </td>
+            <td>
+                <div class="formBlockSurveyCell question">Email&nbsp;<span class="required">*</span></div>
+                {{ form.email }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div class="formBlockSurveyRow fmarg">
+                <div class="formBlockSurveyCell question">Questions/Comments&nbsp;<span class="required">*</span></div>
+                {{ form.comment }}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br class="clearfloat" />
+                <div class="formBlockSurveyCell answer"><span class="required">(*) Required fields</span></div>
+                <br class="clearfloat" />
+
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign</button>
+            </td>
+        </tr>
+    </tablebody>
+</table>
+</form>
+</div>
+
+
+</form><h1> </h1>
+<h1>Career Opportunities</h1>
+<p>We are always looking for energetic, motivated teachers to help educate and inspire our children. If you are interested in applying for a position with us, simply fill out the form above or give us a call. We look forward to hearing from you!</p>
+</div></div>
+</div>
+{% endblock %}

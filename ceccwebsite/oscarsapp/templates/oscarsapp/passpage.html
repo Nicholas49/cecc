@@ -1,0 +1,140 @@
+{% extends 'oscarsapp/oscbase.html' %}
+{% load static %}
+{% block title %}Enter Your Picks{% endblock %}
+{% block styles %}
+    #clnk {
+{% endblock %}
+{% block content %}
+
+    <script>
+        function showpass() {
+            var p = document.getElementById('id_pswrd');
+            var e = document.getElementById('eye');
+
+            if (p.type === "password") {
+                p.type = "text";
+                e.className += " opend";
+            } else {
+                p.type = "password";
+                e.className = e.className.replace(" opend", "");
+            }
+        }
+
+    </script>
+
+
+    <style>
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .boundary {
+            width: 300px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .showbox {
+            background-color: #B7A261;
+            padding: 0px;
+            height: 50px;
+            overflow: hidden;
+            transition: height 1s;
+        }
+
+        .expanded {
+            height: 290px;
+        }
+
+        .expanded2 {
+            height: 195px;
+        }
+
+        h3 {
+            text-align: center;
+            margin: 0px;
+            padding: 15px 0px;
+        }
+
+        .submitbutton {
+            background-color: #C7B271;
+}
+
+.submitbutton:hover {
+            background-color: #c7b261;
+}
+    </style>
+
+    <br><br>
+    <h3 class="sr-only" style='text-align: center'>Welcome</h3><br>
+    <h4 style='color: #880000; text-align: center' id='error'>{{ error }}</h4>
+
+    <div class='boundary'>
+        <div id='signup' class="showbox">
+            <h3 onclick="expand('signup', 'expanded')" style='cursor: pointer; width: 100%'>Sign Up</h3>
+
+            <form class="form-signin" method="POST" action="../create_user/" id='cform'>
+                {% csrf_token %}
+                <center>
+                    <input type='password' name='code' class='inputfield' placeholder='Access Code' required></input><br>
+                    <input type='text' name='username' class='inputfield' placeholder='Username' required></input><br>
+                    <input type='password' name='password' class='inputfield' placeholder='Password' id='pass1' required onkeyup='checklength()'></input><br>
+                    <input type='password' name='repassword' class='inputfield' placeholder='Retype Password' id='pass2' required onkeyup='checkmatch()'></input><br>
+                    <button type='submit' class='submitbutton'>Submit</button>
+                </center>
+            </form>
+        </div>
+        <p> </p>
+        <div id='login' class="showbox">
+            <div onclick="expand('login', 'expanded2')" style='cursor: pointer;'>
+                <h3>Log In</h3>
+            </div>
+            <form class="form-signin" method="POST" action="../login_user">
+                {% csrf_token %}
+                <center>
+                    <input type='text' name='username' class='inputfield' placeholder='Username' required></input><br>
+                    <input type='password' name='password' class='inputfield' placeholder='Password' required></input><br>
+                    <button type='submit' class='submitbutton'>Submit</button>
+                </center>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        function expand(evt, ht){
+            document.getElementById(evt).classList.toggle(ht)
+        }
+
+        function checklength(){
+            var pass = document.getElementById('pass1');
+            if (pass.value.length > 8){
+                pass.style.backgroundColor = '#44ffaa';
+            }
+            else{
+                pass.style.backgroundColor = '#ff4422';
+            }
+
+            if (document.getElementById('pass2').value.length > 0){
+                checkmatch();
+            }
+        }
+
+        function checkmatch(){
+            var pass2 = document.getElementById('pass2');
+            if (document.getElementById('pass1').value == pass2.value){
+                document.getElementById('pass2').style.backgroundColor = '#44ffaa';
+            }
+            else{
+                pass2.style.backgroundColor = '#ff4422';
+            }
+        }
+
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jeopardy Game">
+    <meta name="author" content="01as">
+
+    <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
+    <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <script src="{% static 'cecc/jeopardytimer.js' %}"></script>
+    <link href="//db.onlinewebfonts.com/c/598f92f2bbb58a544a174b7c145ca599?family=ITC+Korinna+Std" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
+
+    <title>Jeopardy</title>
+
+    </head>
+    <body class='lightblue'>
+
+        <div id="stopwatch">
+            <!-- CURRENT TIME -->
+            <div id="sw-time">30</div>
+
+            <!-- CONTROLS -->
+            <input type="button" value="Reset" id="sw-rst" disabled/><input type="button" value="Start" id="sw-go" disabled/>
+        </div>
+
+        <div style='text-align: center'>
+
+            <h3 style='text-transform: uppercase'>{{ catname }}: {{ dollar }}</h3>
+            {% if isdouble %}<h1 id='dd' onclick='reveal()'>DAILY<br>DOUBLE</h1><br>
+
+                <form method="POST" action="http://01as.pythonanywhere.com/jeopardy/tallydouble">
+                    {% csrf_token %}
+
+                    <input type='hidden' name='gname' value='{{ game_name }}'>
+                    <input type='hidden' name='jround' value='{{ jround }}'>
+
+                    <ul class='scorebar'>
+                        {% for t in teams %}
+                            <li class='teambutton'>
+                                <label for="{{ t.teamname }}">
+                                    <input type="checkbox" id='{{ t.teamname }}' name="{{ t.teamname }}" value='{{ t.teamname }}' style='display: none' {% if t.teamno == turn %}checked{% endif %}>
+                                    <span class='teamlabel'>{{ t.teamname }}: {{ t.points }}</span>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <input type='number' value='0' name='wager'><br>
+                    <button class='hidden' id='bb' style='width: 20vw' type='submit'>submit</button>
+
+                </form>
+            {% endif %}
+
+            <div {% if isdouble %}class='hidden' id='aa'{% endif %}>
+                <h2>{% autoescape off %}{{ answer }}{% endautoescape %}</h2>
+                <button type='button' onclick='revealResponse()' style='width: 80vw; max-width: 500px'>Show Question</button>
+            </div>
+
+            <div class='hidden' id='rr'>
+                <h2>{% autoescape off %}{{ question }}{% endautoescape %}</h2>
+
+                {% if not isdouble %}
+                    <form method="POST" action="http://01as.pythonanywhere.com/jeopardy/tallypoints">
+                        {% csrf_token %}
+
+                        <input type='hidden' name='dollaramount' value='{{ dollar }}'>
+                        <input type='hidden' name='gname' value='{{ game_name }}'>
+                        <input type='hidden' name='jround' value='{{ jround }}'>
+                        <ul class='scorebar'>
+                            {% for t in teams %}
+                                <li class='teambutton'>
+                                    <label for="{{ t.teamname }}">
+                                        <input type='text' value='{{ t.points }}' style='display: none'>
+                                        <input type="checkbox" id='{{ t.teamname }}' name="{{ t.teamname }}" value="{{ t.teamname }}" onclick='updatescore(this, {{ t.points }}, {{ dollar }})' style='display: none'>
+                                        <span class='teamlabel'>{{ t.teamname }}: <span>{{ t.points }}</span></span>
+                                    </label>
+                                </li>
+                            {% endfor %}
+                        </ul><br>
+
+                        <button style='width: 20vw' type='submit'>submit</button>
+                    </form>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+
+  </body>
+</html>

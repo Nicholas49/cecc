@@ -1,0 +1,105 @@
+{% extends 'quizthing/quizbase.html' %}
+
+{% block content %}
+
+<script type='text/javascript'>
+    window.location = '#roundno{{ roundnum }}';
+</script>
+
+<div class='header'>
+    <table class="nav">
+        <tr>
+            <td>
+                Rounds
+            </td>
+            <td>
+                <a type="button" href="#roundno1">1</a>
+            </td>
+            <td>
+                <a type="button" href="#roundno2">2</a>
+            </td>
+            <td>
+                <a type="button" href="#roundno3">3</a>
+            </td>
+            <td>
+                <a type="button" href="#roundno4">4</a>
+            </td>
+            <td>
+                <a type="button" href="#roundno5">5</a>
+            </td>
+            <td>
+                <a type="button" href="#roundno6">6</a>
+            </td>
+        </tr>
+    </table>
+    <p> </p>
+</div>
+
+{% for n in rounds %}
+    <p id='roundno{{ forloop.counter }}'> <br> <br> </p>
+    <div style='text-align: center; background-color: #222233; border-radius: 20px 20px 0px 0px; padding: 1px'>
+        <h2 style='text-align: center'>Round: {{ forloop.counter }}</h2>
+    </div>
+    <div style='background-color: #ddeeff; padding: 1em; border-radius: 0px 0px 20px 20px'>
+
+        {% for o in openrounds %}
+            {% if o == n %}
+            <p> </p>
+
+                <form method="GET" action="../answerform/{{ n }}">
+                    {% csrf_token %}
+                    <input name='roundnum' type='number' value={{ forloop.counter }} hidden>
+                    <center><button type='submit' class='abutton'>Answer Form</button></center>
+                </form>
+            {% endif %}
+        {% endfor %}
+
+        <ul style='text-align: center; list-style-type: none; padding: 0px'>
+            {% for a in answersets %}
+
+                {% if a.roundno == n %}
+                    <li style="display: inline-block; width: 420px; max-width: 100%;">
+                    <div style='background-color: #222233;
+                    width: 90%; padding: 1px;
+                    border-radius: 20px 20px 0px 0px;
+                    text-align: left;
+                    margin: 0% 5% 0% 5%'>
+
+                        <h3 style='text-align: center; font-size: 20px'>{{ a.teamname }}: {% for t in teams %}{% if a.teamname == t.teamname %}{{ t.points }}{% endif %}{% endfor %} points</h3>
+                    </div>
+                    <div style='background-color: {% for t in teams %}{% if a.teamname == t.teamname %}{{ t.teamcolor }}{% endif %}{% endfor %}; width: 90%;
+                    padding: 1px;
+                    border-radius: 0px 0px 20px 20px;
+                    text-align: left;
+                    margin: 0% 5% 0% 5%;
+                    font-size: 1.5em;'>
+
+                        <form class="form-signin" method="POST" action="../tallypoints">
+                            {% csrf_token %}
+                            <input name='roundnum' type='number' value={{ a.roundno }} hidden>
+                            <input name='team' type='text' value='{{ a.teamname }}' hidden>
+                            <input type='checkbox' name='cbox1' {% if a.point1 %}checked{% endif %}>1: {{ a.answer1 }}<br>
+                            <input type='checkbox' name='cbox2' {% if a.point2 %}checked{% endif %}>2: {{ a.answer2 }}<br>
+                            <input type='checkbox' name='cbox3' {% if a.point3 %}checked{% endif %}>3: {{ a.answer3 }}<br>
+                            <input type='checkbox' name='cbox4' {% if a.point4 %}checked{% endif %}>4: {{ a.answer4 }}<br>
+                            <input type='checkbox' name='cbox5' {% if a.point5 %}checked{% endif %}>5: {{ a.answer5 }}<br>
+                            <input type='checkbox' name='cbox6' {% if a.point6 %}checked{% endif %}>6: {{ a.answer6 }}<br>
+                            <input type='checkbox' name='cbox7' {% if a.point7 %}checked{% endif %}>7: {{ a.answer7 }}<br>
+                            <input type='checkbox' name='cbox8' {% if a.point8 %}checked{% endif %}>8: {{ a.answer8 }}<br>
+                            <p> </p>
+                            <center><button type='submit' class='hoverbutton' style='color: {% for t in teams %}{% if a.teamname == t.teamname %}{{ t.teamcolor }}{% endif %}{% endfor %}'>Tally Points</button></center>
+                        </form>
+                        <p> </p>
+                    </div>
+                    <p> </p>
+                    </li>
+
+                {% endif %}
+
+        {% endfor %}
+        </ul>
+    </div>
+
+{% endfor %}
+
+{% endblock %}

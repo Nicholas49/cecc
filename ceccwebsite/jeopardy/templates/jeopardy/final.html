@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jeopardy Game">
+    <meta name="author" content="01as">
+
+    <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
+    <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <script src="{% static 'cecc/jeopardytimer.js' %}"></script>
+    <link href="//db.onlinewebfonts.com/c/598f92f2bbb58a544a174b7c145ca599?family=ITC+Korinna+Std" rel="stylesheet" type="text/css"/>
+    <link href="//db.onlinewebfonts.com/c/266e4c01b92d0ac2707aa145f839e9bb?family=Swiss911W01-Compressed" rel="stylesheet" type="text/css"/>
+
+    <title>{{ game_name }} - Final Jeopardy</title>
+
+</head>
+<body class='lightblue'>
+
+    <a href='http://01as.pythonanywhere.com/jeopardy/double/{{ game_name }}'>
+        <div class='back_button'>←</div>
+    </a>
+
+    <div id="stopwatch">
+        <!-- CURRENT TIME -->
+        <div id="sw-time">30</div>
+
+        <!-- CONTROLS -->
+        <input type="button" value="Reset" id="sw-rst" disabled/><input type="button" value="Start" id="sw-go" disabled/>
+    </div>
+
+    <div style='text-align: center'>
+        <h1 style='margin: 0'>
+            <span style='color: #ffbb00; padding: 1px; vertical-align: 80%'>FINAL</span>
+            <img src="{% static 'ceccimages/jeopardy.svg' %}" style='max-width: 40vw'>
+        </h1><br>
+
+
+        <div style='text-align: center'>
+            <div id='dd'>
+                <h1  onclick='reveal()' style='font-size: 8vw; color: #ffffff; margin: 0.5vw'>
+                    {% for f in final %}{{ f.catname }}{% endfor %}
+                </h1>
+
+                <ul class='scorebar'>
+                    {% for t in teams %}
+                        <li>
+                            <span style='font-size: 1.2em; color: #ffdd00'>Team {{ t.teamno }}</span><br>
+                            <strong>{{ t.teamname }}:</strong> ${{ t.points }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <div class='hidden' id='aa'>
+                <h2>{% autoescape off %}{% for f in final %}{{ f.answer }}{% endfor %}{% endautoescape %}</h2>
+                <button type='button' onclick='revealResponse()' style='width: 80vw; max-width: 500px'>Show Question</button>
+            </div>
+
+            <div class='hidden' id='rr'>
+                <h2>{% for f in final %}{{ f.question }}{% endfor %}</h2>
+
+                <form method="POST" action="http://01as.pythonanywhere.com/jeopardy/endgame">
+
+                    {% csrf_token %}
+
+                    <input type='hidden' name='game_name' value='{{ game_name }}'>
+
+                    <ul class='scorebar'>
+                        {% for t in teams %}
+                            <li>
+                                <span style='font-size: 1.2em; color: #ffdd00'>Team {{ t.teamno }}</span><br>
+                                <strong>{{ t.teamname }}:</strong> ${{ t.points }}<br>
+                                <input style='background-color: #0022bb; padding: 0vw 0vw 0vw 0.8vw' type='number' name='{{ t.teamname }}'>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <button type='submit'>submit</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

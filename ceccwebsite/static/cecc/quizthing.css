@@ -1,0 +1,151 @@
+body {
+    background-color: #99ccff;
+    color: #ffffff;
+    font-family: sans-serif;
+    padding: 0px;
+}
+
+.header {
+    background-color: #99ccff;
+    top: 0;
+    text-align: center;
+    position: sticky;
+    padding: 12px 0px 1px;
+    margin: 0px;
+}
+
+.nav {
+    margin: auto;
+}
+
+.nav td a {
+    background-color: #88aaff;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.nav td a:hover {
+    background-color: #333355;
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.boundary {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.showbox {
+    background-color: #8888ff;
+    padding: 5px;
+    height: 50px;
+    overflow: hidden;
+    transition: height 1s;
+    border-radius: 20px;
+}
+
+.showbox input{
+    background-color: #8888ff;
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    color: #ffffff;
+    width: 200px;
+    max-width: 50%;
+}
+
+.showbox input:focus{
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #ffffff;
+}
+
+.showbox button {
+    padding: 10px;
+    border: none;
+    background-color: #eeeeee;
+    color: #000000;
+    border-radius: 10px;
+}
+
+.expanded {
+    height: 170px;
+}
+
+.expanded2 {
+    height: 200px;
+}
+
+h3 {
+    text-align: center;
+}
+
+.showanswerbox {
+    text-align: left;
+    font-size: 2em;
+    padding: 10px;
+    background-color: #8888ff;
+    width: 90vw;
+}
+
+.answerform {
+    background-color: #444488;
+    width: 600px;
+    max-width: 90%;
+    margin: auto;
+    border-radius: 0px 0px 20px 20px;
+    padding: 0.1em 0.5em 0.1em 0.5em;
+    font-size: 1.5em;
+}
+
+.answerform input {
+    background-color: #444488;
+    color: #ffffff;
+    font-size: 1em;
+    margin: 0.2em;
+    border-width: 0px 0px 2px 0px;
+    border-style: solid;
+    border-color: #ffffff;
+    width: 70%;
+
+}
+
+.form-signin {
+    margin: 0.1em;
+    padding: 0.5em;
+}
+
+.pointvalue {
+    width: 25px;
+}
+
+.hoverbutton {
+    background-color: #eeeeee;
+    font-size: 0.8em;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.hoverbutton:hover {
+    background-color: #ffffff;
+}
+
+.abutton {
+    background-color: #555588;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.abutton:hover {
+    background-color: #5555dd;
+}
+
+

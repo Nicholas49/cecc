@@ -1,0 +1,40 @@
+{% extends 'quizthing/quizbase.html' %}
+
+{% block content %}
+
+    </head>
+    <body>
+        <center>
+            <div style='font-size: 1.5em; background-color: #223344; border-radius: 20px 20px 0px 0px; width: 600px; max-width: 90%; padding: 0.5em;'>
+                    <h2>Round: {{ roundnum }}</h2>
+            </div>
+        </center>
+        <div class='answerform'>
+            <center>
+                <form class="form-signin" method="POST" action="../submitanswers">
+                    {% csrf_token %}
+                    <input name='roundno' type='number' value={{ roundnum }} hidden><br>
+                    Answer 1
+                    {{ form.answer1 }}<br>
+                    Answer 2
+                    {{ form.answer2 }}<br>
+                    Answer 3
+                    {{ form.answer3 }}<br>
+                    Answer 4
+                    {{ form.answer4 }}<br>
+                    Answer 5
+                    {{ form.answer5 }}<br>
+                    Answer 6
+                    {{ form.answer6 }}<br>
+                    Answer 7
+                    {{ form.answer7 }}<br>
+                    Answer 8
+                    {{ form.answer8 }}<br><p> </p>
+                    <center><button type='submit' style='background-color: #555599; font-size: 0.8em; color: #ffffff; border: none; padding: 10px; border-radius: 20px;'>Submit</button></center>
+                </form>
+            </center>
+        </div>
+    </body>
+</html>
+
+{% endblock %}

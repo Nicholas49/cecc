@@ -25,13 +25,16 @@ SECRET_KEY = '_f@qm#_2)*+%uey9#+1bns0xdq0nd)lj3od0y84kawgt)k#l7p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['01as.pythonanywhere.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'cecc',
+    'oscarsapp',
+    'quizthing',
+    'jeopardy',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,3 +122,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = '/home/01as/cecc/ceccwebsite/static'

@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jeopardy Game">
+    <meta name="author" content="01as">
+    <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
+    <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <link href="//db.onlinewebfonts.com/c/266e4c01b92d0ac2707aa145f839e9bb?family=Swiss911W01-Compressed" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
+
+    <title>{{ game_name }} - Edit - Double Jeopardy</title>
+
+    </head>
+    <body>
+        <form method="POST" action="../change_name" style='text-align: center'>
+            {% csrf_token %}
+            <input type='hidden' name='oldname' value='{{ game_name }}'>
+            <input type='hidden' name='jround' value='double'>
+            <input name='newname' value='{{ game_name }}' onfocusout='teamedit(this)' style='font-size: 4vw; font-family: "Swiss911W01-Compressed"; color: #ffbb00; background-color: #000066; border: none; border-radius: 1vw; text-align: center'>
+        </form>
+
+        <a href='../play/{{ game_name }}'>
+            <h4 style='position: absolute; top: 0.5vw; right: 0.5vw; margin: 0.5vw; background-color: #000066; padding: 1vw; border-radius: 1vw'>play</h4>
+        </a>
+
+        <a href='https://01as.pythonanywhere.com/jeopardy'>
+            <h4 style='position: absolute; top: 0.5vw; right: 9vw; margin: 0.5vw; background-color: #000066; padding: 1vw; border-radius: 1vw'>Home</h4>
+        </a>
+
+        <br>
+        <center>
+            <h3><a href='../create_game/{{ game_name }}'>Single</a> <span style='background-color: #0000aa; padding: 10px; border-radius: 10px;'>Double</span> <a href='../create_gamef/{{ game_name }}'>Final</a></h3>
+        </center>
+        <br>
+
+        <div style='padding: 1vw; background-color: #000066; border-radius: 1vw'>
+            <table class='jboard cboard'>
+                <tr class='shift_arrows'>
+                    <th style='width: 0px;'>
+                        <form method='GET' action='../shiftright' onsubmit="disableb()" style='transform: translate(0%)'>
+
+                            <input type='hidden' name='game_name' value='{{ game_name }}'>
+                            <input type='hidden' name='category' value='cat6'>
+                            <input type='hidden' name='jround'  value='double'>
+
+                            <button type='submit'>&#8644;</button>
+                        </form>
+                    </th>
+                    {% for cl in catlist %}
+                        <th>
+                            <form method='GET' action='../shiftup' onsubmit="disableb()" style='width:4vw'>
+
+                                <input type='hidden' name='game_name' value='{{ game_name }}'>
+                                <input type='hidden' name='category' value='{{ cl }}'>
+                                <input type='hidden' name='jround'  value='double'>
+
+                                <button type='submit'>&#8686;</button>
+                            </form>
+                            <form method='GET' action='../shiftright' onsubmit="disableb()" style='position: absolute; transform: translate({% if not forloop.counter == 6 %}240{% else %}180{% endif %}%)'>
+
+                                <input type='hidden' name='game_name' value='{{ game_name }}'>
+                                <input type='hidden' name='category' value='{{ cl }}'>
+                                <input type='hidden' name='jround'  value='double'>
+
+                                <button type='submit'>&#8644;</button>
+                            </form>
+                            <form method='GET' action='../shiftdown' onsubmit="disableb()" style='width:4vw'>
+
+                                <input type='hidden' name='game_name' value='{{ game_name }}'>
+                                <input type='hidden' name='category' value='{{ cl }}'>
+                                <input type='hidden' name='jround'  value='double'>
+
+                                <button type='submit'><div style='transform: rotate(180deg)'>&#8686;</div></button>
+                            </form>
+                        </th>
+                    {% endfor %}
+                    <th style='width: 0px;'></th>
+                </tr>
+                <tr>
+                    <th> </th>
+                    {% for cl in catlist %}
+                        <th>
+                            <button onclick='showform(this)' class='drop down'>
+                                <h5>{% for c in categories %}{% if c.category == cl %}{{ c.catname }}{% endif %}{% endfor %}</h5>
+                                <span>&#9660;</span>
+                            </button>
+
+                            <div class='changeform'>
+                                <form method="POST" action="../make_category">
+                                    {% csrf_token %}
+
+                                    <input type='hidden' name='game_name' value='{{ game_name }}'>
+                                    <input type='hidden' name='category' value='{{ cl }}'>
+                                    <input type='hidden' name='jround'  value='double'>
+
+                                    <div id='aform'>
+                                        <label for='answer'>Category Title</label><br>
+                                        <textarea name='answer' class='texty'>{% for c in categories %}{% if c.category == cl %}{{ c.catname }}{% endif %}{% endfor %}</textarea>
+                                    </div>
+
+                                    <button type='submit' style='width: 100%'>Submit</button>
+                                </form>
+                            </div>
+                        </th>
+                    {% endfor %}
+                    <th> </th>
+                </tr>
+                {% for n in numlist %}
+                    <tr>
+                        <td> </td>
+                        {% for c in catlist %}
+                        <td style='padding: 0.2vw'>
+                            <button onclick='showform(this)' class='drop down'>
+                                <h1 class='bubble' {% for a in answers %}{% if a.category == c and a.dollar == n %}{% if a.isdouble %}style='color: #ff6600'{% else %}style='color: #ffbb00'{% endif %}{% endif %}{% endfor %}>{% if not n == 'ex' %}${% endif %}{{ n }}</h1>
+                                <span>&#9660;</span>
+                            </button>
+
+                            <div class='changeform'>
+                                <form method="POST" action="../make_game">
+                                    {% csrf_token %}
+
+                                    <input type='hidden' name='game_name' value='{{ game_name }}'>
+                                    <input type='hidden' name='jround'  value='double'>
+                                    <input type='hidden' name='category' value='{{ c }}'>
+                                    <input type='hidden' name='dollar'  value='{{ n }}'>
+
+
+                                    <div id='aform'>
+                                        <label for='answer'>Answer</label><br>
+                                        <textarea name='answer' class='texty'>{% for a in answers %}{% if a.category == c and a.dollar == n %}{{ a.answer }}{% endif %}{% endfor %}</textarea>
+
+                                        <label for='question'>Question</label><br>
+                                        <textarea name='question' class='texty' style='height: 5vw'>{% for a in answers %}{% if a.category == c and a.dollar == n %}{{ a.question }}{% endif %}{% endfor %}</textarea><br>
+                                        {% if not n == 'ex' %}
+                                            <input type="checkbox" name="dailydouble" value='dd' style='width: 1vw' {% for a in answers %}{% if a.category == c and a.dollar == n and a.isdouble %}checked{% endif %}{% endfor %}>
+                                            <label for="dailydouble" style='font-size: 1.5vw'>Daily Double</label>
+                                        {% endif %}
+                                    </div>
+
+                                    <button type='submit' style='width: 100%'>Submit</button>
+                                </form>
+                            </div>
+                        </td>
+                        {% endfor %}
+                        <td> </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="{% static 'cecc/functions.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'cecc/print.css' %}" type="text/css" media="print" />
+    <link rel="stylesheet" href="{% static 'cecc/base.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'cecc/educare.css' %}" type="text/css" media="screen, projection"/>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Children's Edu-Care Center - Montessori, Pre-School Programs for Young Children, St. Peters, MO</title>
+
+
+</head>
+<body>
+
+    <div id="header">
+        <div>
+	        <div id="logo">
+	            <img src="{% static 'ceccimages/educare_logo.png' %}" alt="Edu-Care Logo" style="height: 15vmin"/>
+            </div>
+            <h1 id="titlebar">Children's Edu-Care Center</h1>
+            <div id="slogan">&quot;Programs for Young Children&quot;</div>
+        </div>
+        <ul id="nav">
+            <li><a type="button" href="{% url 'index' %}" id="circle"><span>HOME</span></a></li>
+            <li><a type="button" href="{% url 'history' %}" id="star"><span>HISTORY</span></a></li>
+            <li><a type="button" href="{% url 'programs' %}" id="star">PROGRAMS</a></li>
+            <li class="dropdown1"><a type="button" href="{% url 'photos' %}" id="star">NEWS</a>
+                <div class="dropdown2">
+                    <div class="dropdown3"><a href="{% url 'mrdcnewsletter' %}"><p>MRDC Newsletter</p></a></div>
+                    <div class="dropdown3"><a href="{% url 'ceccnewsletter' %}"><p>CECC Montessori Newsletter</p></a></div>
+                    <div class="dropdown3"><a href="{% url 'schedules' %}"><p>CECC Kountry Klub Summer Schedule</p></a></div>
+                </div>
+            </li>
+            <li class="dropdown1"><a href="{% url 'ceccmenus' %}" id="star">MENUS</a>
+                <div class="dropdown2">
+                    <div class="dropdown3"><a href="{% url 'mrdcmenus' %}"><p>MRDC</p></a></div>
+                    <div class="dropdown3"><a href="{% url 'ceccmenus' %}"><p>CECC</p></a></div>
+                </div>
+            </li>
+            <li><a href="{% url 'contact' %}" id="star">CONTACT</a></li>
+        </ul>
+
+    </div><!--/header-->
+
+    <div id="contentarea">
+
+        {% block content %}
+        {% endblock %}
+
+        {% if rightpane %}
+
+            <div id="rightpane">
+                <h2 style="color: #fff; font-size: 30px">Locations</h2>
+                <p>
+                    <center>
+                    <a href="{% url 'contact' %}">
+                        <img src="{% static 'ceccimages/center-educare.png' %}" width="100%" title="Contact Children's Edu-Care Center" alt="Children's Edu-Care Center" />
+                    </a>
+                    </center>
+                    <br />
+                    <strong>Children's Edu-Care Center</strong>
+                    <br />
+                    <a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=100+Vantage+Drive+st.+peters+mo+63376&aq=&sll=38.790921,-90.625998&sspn=0.006924,0.01045&ie=UTF8&hq=&hnear=100+Vantage+Dr,+St+Peters,+St+Charles,+Missouri+63376&t=h&z=17&iwloc=A" TARGET="_blank">
+                        100 Vantage Drive
+                        <br />
+                        Saint Peters, MO 63376
+                    </a>
+                    <br />
+                    <strong>(636) 397-4090</strong>
+                </p>
+                <p>
+                    <center>
+                    <a href="{% url 'contact' %}">
+                        <img src="{% static 'ceccimages/center-daycare.png' %}" width="100%" title="Contact Mid Rivers Day Care" alt="Mid Rivers Day Care" />
+                    </a>
+                    </center>
+                    <br />
+                    <strong>Mid Rivers Day Care</strong>
+                    <br />
+                    <a href="http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=349+Mid+Rivers+Mall+Drive+st.+peters+mo+63376&aq=&sll=37.160317,-95.712891&sspn=56.81167,85.605469&ie=UTF8&hq=&hnear=349+Mid+Rivers+Mall+Dr,+St+Peters,+St+Charles,+Missouri+63376&t=h&z=17&iwloc=A" TARGET="_blank">
+                        349 Mid Rivers Mall Drive
+                        <br />
+                        Saint Peters, MO 63376
+                    </a>
+                    <br />
+                    <strong>(636) 278-1163</strong>
+                </p>
+                <p>
+                    <strong>Hours: 6:00am - 6:30pm M-F</strong>
+                    <br />
+                    <p>
+                        <a href="{% url 'video' %}">
+                            <img src="{% static 'ceccimages/virtual-tour.png' %}" width="100%" alt="Virtual Tour" />
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://www.stpetersmo.net/" TARGET="_blank">
+                            <img src="{% static 'ceccimages/25_YEAR_RECOGNTION_LOGO.jpg' %}" height="160" title="Serving St. Peters for Over 25 Years" alt="Child Care Aware" />
+                        </a>
+                    </p>
+                    <p>
+                        <a href="http://mo.childcareaware.org/" TARGET="_blank">
+                            <img src="{% static 'ceccimages/mo-cca-logowtagline-1a.png' %}" width="189" height="121" title="Visit Child Care Aware Website" alt="Child Care Aware" />
+                        </a>
+                    </p>
+                    <p>
+                        <a href="http://www.montessori-namta.org/School-Directory/Childrens-Edu-Care-Center-Inc-MO-" TARGET="_blank">
+                            <img src="{% static 'ceccimages/namta-logo.png' %}" width="118" height="129" title="Visit NAMTA Website" alt="Visit NAMTA Website" />
+                        </a>
+                    </p>
+                </p>
+            </div>
+
+            <div class="cb"></div>
+
+        {% endif %}
+
+    </div>
+
+	<!--/content-->
+
+    <div id="footer" style="position: relative; z-index: 2;">
+        <a href="/">Home</a> /<a href="/history"> History</a> /  <a href="/programs/">Programs</a> / <a href="/photo-gallery/">Photos</a> / <a href="/news/">News</a> / <a href="/contact-us/">Contact Us</a> / <a href="/index.php/login/">Login</a><br />
+            Copyright&copy; 2011 / <a href="/site-map">Children's Edu-Care Center Site Map</a>
+        <p>
+            <a href="http://www.youtube.com/user/educarecenter" TARGET="_blank">
+                <img src="{% static 'ceccimages/You-Tube-logo.png' %}" width="69" height="30" title="Visit Our YouTube Channel" alt="YouTube" />
+            </a>
+        </p>
+    </div><!--/footer-->
+
+</body>
+</html>

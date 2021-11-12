@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jeopardy Game">
+    <meta name="author" content="01as">
+    <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
+    <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <link href="//db.onlinewebfonts.com/c/266e4c01b92d0ac2707aa145f839e9bb?family=Swiss911W01-Compressed" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
+
+    <title>Jeopardy Home</title>
+
+
+
+    <body>
+
+        <div style='text-align: center'>
+            <img src="{% static 'ceccimages/jeopardy.svg' %}" class='jheader'>
+        </div>
+
+        <div class='topper'>
+            <table class='menu'>
+                <tr style='background-color: #000088;'>
+                    <th colspan='3'>
+                        <h1 style=' color: #ffbb00; padding: 0px; margin: 0px;'>Games</h1>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan='2'>
+                        <input id='newname' style='width: 90%; background-color: #4444ff; border: none; padding: 0.5vw; font-size: 1.5vw; color: #ffffff'>
+                    </th>
+                    <th colspan='1'>
+                        <button onclick='creategame()'>CREATE</button>
+                    </th>
+                </tr>
+                {% for g in games %}
+                    <tr onclick='expandgame(this)'>
+                        <th colspan='3'>
+                            {{ g }}
+                        </th>
+                    </tr><tr class='hidden2'>
+                        <td>
+                            <div>
+                                <a href='http://01as.pythonanywhere.com/jeopardy/create_game/{{ g }}'><button>EDIT</button></a>
+                            </div>
+                        </td><td>
+                            <div>
+                                <a href='http://01as.pythonanywhere.com/jeopardy/play/{{ g }}'><button>PLAY</button></a>
+                            </div>
+                        </td><td>
+                            <div>
+                                <a onclick='deletegame("{{ g }}")'><button>DELETE</button></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </body>
+</html>

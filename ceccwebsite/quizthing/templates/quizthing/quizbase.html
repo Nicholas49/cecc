@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Quiz Website">
+    <meta name="author" content="01as">
+
+    <title>{% block title %}Quiz Thing{% endblock %}</title>
+
+    <link href="{% static 'cecc/quizthing.css' %}" rel="stylesheet">
+
+    </head>
+    <body>
+        <div style='text-align: center'>
+            <a type="button" onclick="alert('Only the Admin can reset games\n are you the Admin? No?\n Then quit it!')" style='position: absolute;
+                top: 5px;
+                right: 70px;
+                background-color: #556688;
+                color: #ffffff;
+                padding: 5px;
+                text-decoration: underline;
+                border-radius: 5px'>Reset Game</a>
+            <a type="button" href="../logoutteam" style='position: absolute;
+                top: 5px;
+                right: 5px;
+                background-color: #556688;
+                color: #ffffff;
+                padding: 5px;
+                border-radius: 5px'>Logout</a>
+            <p> </p>
+
+            <h1>The People's Quiz Thing</h1>
+        </div>
+        {% block content %}
+        {% endblock %}
+
+
+  </body>
+</html>

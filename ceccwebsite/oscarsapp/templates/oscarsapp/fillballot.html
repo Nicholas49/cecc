@@ -1,0 +1,1185 @@
+{% extends 'oscarsapp/oscbase.html' %}
+{% load static %}
+{% block title %}Enter Your Picks{% endblock %}
+{% block styles %}
+    #clnk {
+{% endblock %}
+{% block content %}
+
+
+<div class="container">
+
+    <span style="background-color: #B7A261; padding: 5px 10px; font-size: 30px; cursor: pointer; position: sticky; top: 0px;" onclick="openNav()">Nav</span>
+
+    <div id='side_nav' style='text-align: center; position: fixed; z-index: 1; top: 0px; width: 200px; height: 100%; background-color: #B7A261; transform: translate(-100%, 0%); padding: 10px; left: 0px; transition: 0.5s'>
+        <span href="javascript:void(0)" class="closebtn" onclick="closeNav()" style='font-size: 30px; cursor: pointer; position: absolute; top: 0; right: 10px;'>&times;</span>
+
+        <a href='#top'>Top</a><br>
+        <a href='#best_pic'>Best Picture</a><br>
+        <a href='#actor'>Actor</a><br>
+        <a href='#actress'>Actress</a><br>
+        <a href='#sup_actor'>Supporting Actor</a><br>
+        <a href='#sup_actress'>Supporting Actress</a><br>
+        <a href='#animated'>Animated</a><br>
+        <a href='#cinematography'>Cinematography</a><br>
+        <a href='#costume'>Costume Design</a><br>
+        <a href='#directing'>Directing</a><br>
+        <a href='#documentary'>Documentary</a><br>
+        <a href='#doc_short'>Documentary Short</a><br>
+        <a href='#editing'>Film Editing</a><br>
+        <a href='#foreign'>Foreign Film</a><br>
+        <a href='#makeup'>Makeup & Hairstyling</a><br>
+        <a href='#score'>Original Score</a><br>
+        <a href='#song'>Original Song</a><br>
+        <a href='#production'>Production Design</a><br>
+        <a href='#anim_short'>Animated Short</a><br>
+        <a href='#live_short'>Live Action Short</a><br>
+        <a href='#sound'>Sound</a><br>
+        <a href='#fx'>Visual Effects</a><br>
+        <a href='#adapted_screenplay'>Adapted Screenplay</a><br>
+        <a href='#original_screenplay'>Original Screenplay</a>
+    </div>
+
+    <form class="form-signin" method="POST" action="../submitballot/" onclick="closeNav()">
+        {% csrf_token %}
+        <div class="form-group" style='margin: 0px'>
+
+            <h1 style="margin: 10px">{{ name }}'s Ballot</h1><br>
+
+            <input type="hidden" name="name" class="inputfield form-control" value="{{ name }}" maxlength="30" required="" id="id_name">
+        </div>
+
+        <div class="form-group">
+            <label for="inputName" class="sr-only">Choose Color</label><br>
+            <input type="color" name="kulr" value="{% if hasballot %}{{ ballot.kulr }}{% else %}#0000ff{% endif %}" class="kulr form-control" maxlength="20" required="" id="id_kulr">
+            <p style="font-size: 0.6em; color: #999">(Picking a light color could make your info hard to read!)</p>
+        </div>
+
+        {% if not hasballot %}
+            <script>
+                function getRandomColor() {
+                    var letters = '0123456789ABCDEF';
+                    var color = '#';
+                    for (var i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 16)];
+                    }
+                    return color;
+                }
+
+                document.getElementById("id_kulr").value = getRandomColor();
+            </script>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='best_pic'>BEST PICTURE</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="bestpicture" value="The Father" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_0" {% if hasballot and ballot.bestpicture == 'The Father' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_father.jpg' %}">
+                        The Father
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="Judas and the Black Messiah" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_1" {% if hasballot and ballot.bestpicture == 'Judas and the Black Messiah' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/judas_and_the_black_messiah.jpg' %}">
+                        Judas and the Black Messiah
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="Mank" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_2" {% if hasballot and ballot.bestpicture == 'Mank' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        Mank
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="Minari" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_3" {% if hasballot and ballot.bestpicture == 'Minari' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/minari.jpg' %}">
+                        Minari
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="Nomadland" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_4" {% if hasballot and ballot.bestpicture == 'Nomadland' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/nomadland.jpg' %}">
+                        Nomadland
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="Promising Young Woman" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_5" {% if hasballot and ballot.bestpicture == 'Promising Young Woman' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/promising_young_woman.jpg' %}">
+                        Promising Young Woman
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="Sound of Metal" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_6" {% if hasballot and ballot.bestpicture == 'Sound of Metal' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/sound_of_metal.jpg' %}">
+                        Sound of Metal
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="bestpicture" value="The Trial of the Chicago 7" class="horlist1" placeholder="Bestpicpik" required id="id_bestpicture_7" {% if hasballot and ballot.bestpicture == 'The Trial of the Chicago 7' %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/trial_of_the_chicago_7.jpg' %}">
+                        The Trial of the Chicago 7
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+
+            <label for="comment" class="sr-only" id='actor'>ACTOR IN A LEADING ROLE</label>
+            <ul id="id_actor" class="radiolist">
+                <li><label for="id_actor_0">
+                    <input type="radio" name="actor" value="Riz Ahmed" class="form-control horlist" placeholder="Actorpik" required id="id_actor_0" {% if hasballot and ballot.actor == "Riz Ahmed" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/riz_ahmed.jpg' %}">
+                        <span>Riz Ahmed</span><br>
+                        (Sound of Metal)
+                    </div>
+                </label></li>
+                <li><label for="id_actor_1">
+                    <input type="radio" name="actor" value="Chadwick Boseman" class="form-control horlist" placeholder="Actorpik" required id="id_actor_1" {% if hasballot and ballot.actor == "Chadwick Boseman" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/chadwick_boseman.jpg' %}">
+                        <span>Chadwick Boseman</span><br>
+                        (Ma Rainey's Black Bottom)
+                    </div>
+                </label></li>
+                <li><label for="id_actor_2">
+                    <input type="radio" name="actor" value="Anthony Hopkins" class="form-control horlist1" placeholder="Actorpik" required id="id_actor_2" {% if hasballot and ballot.actor == "Anthony Hopkins" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/anthony_hopkins.jpg' %}">
+                        <span>Anthony Hopkins</span><br>
+                        (The Father)
+                    </div>
+                </label></li>
+                <li><label for="id_actor_3">
+                    <input type="radio" name="actor" value="Gary Oldman" class="form-control horlist1" placeholder="Actorpik" required id="id_actor_3" {% if hasballot and ballot.actor == "Gary Oldman" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/gary_oldman.jpg' %}">
+                        <span>Gary Oldman</span><br>
+                        (Mank)
+                    </div>
+                </label></li>
+                <li><label for="id_actor_4">
+                    <input type="radio" name="actor" value="Steven Yeun" class="form-control horlist1" placeholder="Actorpik" required id="id_actor_4" {% if hasballot and ballot.actor == "Steven Yeun" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/steven_yeun.jpg' %}">
+                        <span>Steven Yeun</span><br>
+                        (Minari)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='actress'>ACTRESS IN A LEADING ROLE</label>
+
+            <ul class="radiolist">
+                <li><label for="id_actress_0">
+                    <input type="radio" name="actress" value="Viola Davis" class="horlist" placeholder="Actresspik" required id="id_actress_0" {% if hasballot and ballot.actress == "Viola Davis" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/viola_davis.jpg' %}">
+                        <span>Viola Davis</span><br>
+                        (Ma Rainey's Black Bottom)
+                    </div>
+                </label></li>
+                <li><label for="id_actress_1">
+                    <input type="radio" name="actress" value="Andra Day" class="horlist" placeholder="Actresspik" required id="id_actress_1" {% if hasballot and ballot.actress == "Andra Day" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/andra_day.jpg' %}">
+                        <span>Andra Day</span><br>
+                        (The United States vs. Billie Holiday)
+                    </div>
+                </label></li>
+                <li><label for="id_actress_2">
+                    <input type="radio" name="actress" value="Vanessa Kirby" class="horlist1" placeholder="Actresspik" required id="id_actress_2" {% if hasballot and ballot.actress == "Vanessa Kirby" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/vanessa_kirby.jpg' %}">
+                        <span>Vanessa Kirby</span><br>
+                        (Pieces of a Woman)
+                    </div>
+                </label></li>
+                <li><label for="id_actress_3">
+                    <input type="radio" name="actress" value="Frances McDormand" class="horlist1" placeholder="Actresspik" required id="id_actress_3" {% if hasballot and ballot.actress == "Frances McDormand" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/frances_mcdormand.jpg' %}">
+                        <span>Frances McDormand</span><br>
+                        (Nomadland)
+                    </div>
+                </label></li>
+                <li><label for="id_actress_4">
+                    <input type="radio" name="actress" value="Carey Mulligan" class="horlist1" placeholder="Actresspik" required id="id_actress_4" {% if hasballot and ballot.actress == "Carey Mulligan" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/carey_mulligan.jpg' %}">
+                        <span>Carey Mulligan</span><br>
+                        (Promising Young Woman)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='sup_actor'>ACTOR IN A SUPPORTING ROLE</label>
+
+            <ul class="radiolist">
+                <li><label for="id_supactor_0">
+                    <input type="radio" name="supactor" value="Sacha Baron Cohen" class="horlist" placeholder="supactorpik" required id="id_supactor_0" {% if hasballot and ballot.supactor == "Sacha Baron Cohen" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/sacha_baron_cohen.jpg' %}">
+                        <span>Sacha Baron Cohen</span><br>
+                        (The Trial of the Chicago 7)
+                    </div>
+                </label></li>
+                <li><label for="id_supactor_1">
+                    <input type="radio" name="supactor" value="Daniel Kaluuya" class="horlist" placeholder="supactorpik" required id="id_supactor_1" {% if hasballot and ballot.supactor == "Daniel Kaluuya" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/daniel_kaluuya.jpg' %}">
+                        <span>Daniel Kaluuya</span><br>
+                        (Judas and the Black Messiah)
+                    </div>
+                </label></li>
+                <li><label for="id_supactor_2">
+                    <input type="radio" name="supactor" value="Leslie Odom Jr." class="horlist1" placeholder="supactorpik" required id="id_supactor_2" {% if hasballot and ballot.supactor == "Leslie Odom Jr." %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/leslie_odom_jr.jpg' %}">
+                        <span>Leslie Odom Jr.</span><br>
+                        (One Night in Miami)
+                    </div>
+                </label></li>
+                <li><label for="id_supactor_3">
+                    <input type="radio" name="supactor" value="Paul Raci" class="horlist1" placeholder="supactorpik" required id="id_supactor_3" {% if hasballot and ballot.supactor == "Paul Raci" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/paul_raci.jpg' %}">
+                        <span>Paul Raci</span><br>
+                        (Sound of Metal)
+                    </div>
+                </label></li>
+                <li><label for="id_supactor_4">
+                    <input type="radio" name="supactor" value="Lakeith Stanfield" class="horlist1" placeholder="supactorpik" required id="id_supactor_4" {% if hasballot and ballot.supactor == "Lakeith Stanfield" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/lakeith_stanfield.jpg' %}">
+                        <span>Lakeith Stanfield</span><br>
+                        (Judas and the Black Messiah)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='sup_actress'>ACTRESS IN A SUPPORTING ROLE</label>
+
+            <ul class="radiolist">
+                <li><label for="id_supactress_0">
+                    <input type="radio" name="supactress" value="Maria Bakalova" class="horlist" placeholder="supctresspik" required id="id_supactress_0" {% if hasballot and ballot.supactress == "Maria Bakalova" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/maria_bakalova.jpg' %}">
+                        <span>Maria Bakalova</span><br>
+                        (Borat Subsequent Moviefilm: Delivery of Prodigious Bribe to American Regime for Make Benefit Once Glorious Nation of Kazakhstan)
+                    </div>
+                </label></li>
+                <li><label for="id_supactress_1">
+                    <input type="radio" name="supactress" value="Glenn Close" class="horlist" placeholder="supactresspik" required id="id_supactress_1" {% if hasballot and ballot.supactress == "Glenn Close" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/glenn_close.jpg' %}">
+                        <span>Glenn Close</span><br>
+                        (Hillbilly Elegy)
+                    </div>
+                </label></li>
+                <li><label for="id_supactress_2">
+                    <input type="radio" name="supactress" value="Olivia Colman" class="horlist1" placeholder="supactresspik" required id="id_supactress_2" {% if hasballot and ballot.supactress == "Olivia Colman" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/olivia_colman.jpg' %}">
+                        <span>Olivia Colman</span><br>
+                        (The Father)
+                    </div>
+                </label></li>
+                <li><label for="id_supactress_3">
+                    <input type="radio" name="supactress" value="Amanda Seyfried" class="horlist1" placeholder="supactresspik" required id="id_supactress_3" {% if hasballot and ballot.supactress == "Amanda Seyfried" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/amanda_seyfried.jpg' %}">
+                        <span>Amanda Seyfried</span><br>
+                        (Mank)
+                    </div>
+                </label></li>
+                <li><label for="id_supactress_4">
+                    <input type="radio" name="supactress" value="Youn Yuh-jung" class="horlist1" placeholder="supactresspik" required id="id_supactress_4" {% if hasballot and ballot.supactress == "Youn Yuh-jung" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/headshot/youn_yuh_jung.jpg' %}">
+                        <span>Youn Yuh-jung</span><br>
+                        (Minari)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='animated'>ANIMATED FEATURE FILM</label>
+
+            <ul class="radiolist">
+                <li><label for="id_animatedfeature_0">
+                    <input type="radio" name="animatedfeature" value="Onward" class="horlist" placeholder="animatedfeaturepik" required id="id_animatedfeature_0" {% if hasballot and ballot.animatedfeature == "Onward" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/onward.jpg' %}">
+                        <span>Onward</span><br>
+                        (Dan Scanlon and Kori Rae)
+                    </div>
+                </label></li>
+                <li><label for="id_animatedfeature_1">
+                    <input type="radio" name="animatedfeature" value="Over the Moon" class="horlist" placeholder="animatedfeaturepik" required id="id_animatedfeature_1" {% if hasballot and ballot.animatedfeature == "Over the Moon" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/over_the_moon.jpg' %}">
+                        <span>Over the Moon</span><br>
+                        (Glen Keane, Gennie Rim and Peilin Chou)
+                    </div>
+                </label></li>
+                <li><label for="id_animatedfeature_2">
+                    <input type="radio" name="animatedfeature" value="A Shaun the Sheep Movie: Farmageddon" class="horlist1" placeholder="animatedfeaturepik" required id="id_animatedfeature_2" {% if hasballot and ballot.animatedfeature == "A Shaun the Sheep Movie: Farmageddon" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/shawn_the_sheep_farmageddon.jpg' %}">
+                        <span>A Shaun the Sheep Movie: Farmageddon</span><br>
+                        (Richard Phelan, Will Becher and Paul Kewley)
+                    </div>
+                </label></li>
+                <li><label for="id_animatedfeature_3">
+                    <input type="radio" name="animatedfeature" value="Soul" class="horlist1" placeholder="animatedfeaturepik" required id="id_animatedfeature_3" {% if hasballot and ballot.animatedfeature == "Soul" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/soul.jpg' %}">
+                        <span>Soul</span><br>
+                        (Pete Docter and Dana Murray)
+                    </div>
+                </label></li>
+                <li><label for="id_animatedfeature_4">
+                    <input type="radio" name="animatedfeature" value="Wolfwalkers" class="horlist1" placeholder="animatedfeaturepik" required id="id_animatedfeature_4" {% if hasballot and ballot.animatedfeature == "Wolfwalkers" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/wolfwalkers.jpg' %}">
+                        <span>Wolfwalkers</span><br>
+                        (Tomm Moore, Ross Stewart, Paul Young and Stéphan Roelants)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='cinematography'>CINEMATOGRAPHY</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="cinematography" value="Judas and the Black Messiah" class="horlist" placeholder="cinematographypik" required id="id_cinematography_0" {% if hasballot and ballot.cinematography == "Judas and the Black Messiah" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/judas_and_the_black_messiah.jpg' %}">
+                        <span>Judas and the Black Messiah</span><br>
+                        (Sean Bobbitt)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="cinematography" value="Mank" class="horlist" placeholder="cinematographypik" required id="id_cinematography_1" {% if hasballot and ballot.cinematography == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (Erik Messerschmidt)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="cinematography" value="News of the World" class="horlist1" placeholder="cinematographypik" required id="id_cinematography_2" {% if hasballot and ballot.cinematography == "News of the World" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/news_of_the_world.jpg' %}">
+                        <span>News of the World</span><br>
+                        (Dariusz Wolski)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="cinematography" value="Nomadland" class="horlist1" placeholder="cinematographypik" required id="id_cinematography_3" {% if hasballot and ballot.cinematography == "Nomadland" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/nomadland.jpg' %}">
+                        <span>Nomadland</span><br>
+                        (Joshua James Richards)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="cinematography" value="The Trial of the Chicago 7" class="horlist1" placeholder="cinematographypik" required id="id_cinematography_4" {% if hasballot and ballot.cinematography == "The Trial of the Chicago 7" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/trial_of_the_chicago_7.jpg' %}">
+                        <span>The Trial of the Chicago 7</span><br>
+                        (Phedon Papamichael)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='costume'>COSTUME DESIGN</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="costume" value="Emma" class="horlist" placeholder="costumepik" required id="id_costume_0" {% if hasballot and ballot.costume == "Emma" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/emma.jpg' %}">
+                        <span>Emma</span><br>
+                        (Alexandra Byrne)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="costume" value="Ma Rainey's Black Bottom" class="horlist" placeholder="costumepik" required id="id_costume_1" {% if hasballot and ballot.costume == "Ma Rainey's Black Bottom" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/ma_rainey.jpg' %}">
+                        <span>Ma Rainey's Black Bottom</span><br>
+                        (Ann Roth)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="costume" value="Mank" class="horlist1" placeholder="costumepik" required id="id_costume_2" {% if hasballot and ballot.costume == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (Trish Summerville)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="costume" value="Mulan" class="horlist1" placeholder="costumepik" required id="id_costume_3" {% if hasballot and ballot.costume == "Mulan" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mulan.jpg' %}">
+                        <span>Mulan</span><br>
+                        (Bina Daigeler)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="costume" value="Pinocchio" class="horlist1" placeholder="costumepik" required id="id_costume_4" {% if hasballot and ballot.costume == "Pinocchio" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/pinocchio.jpg' %}">
+                        <span>Pinocchio</span><br>
+                        (Massimo Cantini Parrini)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='directing'>DIRECTING</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="directing" value="Another Round" class="horlist" placeholder="directingpik" required id="id_directing_0" {% if hasballot and ballot.directing == "Another Round" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/another_round.jpg' %}">
+                        <span>Another Round</span><br>
+                        (Thomas Vinterberg)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="directing" value="Mank" class="horlist" placeholder="directingpik" required id="id_directing_1" {% if hasballot and ballot.directing == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (David Fincher)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="directing" value="Minari" class="horlist1" placeholder="directingpik" required id="id_directing_2" {% if hasballot and ballot.directing == "Minari" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/minari.jpg' %}">
+                        <span>Minari</span><br>
+                        (Lee Isaac Chung)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="directing" value="Nomadland" class="horlist1" placeholder="directingpik" required id="id_directing_3" {% if hasballot and ballot.directing == "Nomadland" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/nomadland.jpg' %}">
+                        <span>Nomadland</span><br>
+                        (Chloé Zhao)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="directing" value="Promising Young Woman" class="horlist1" placeholder="directingpik" required id="id_directing_4" {% if hasballot and ballot.directing == "Promising Young Woman" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/promising_young_woman.jpg' %}">
+                        <span>Promising Young Woman</span><br>
+                        (Emerald Fennell)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='documentary'>DOCUMENTARY (FEATURE)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="documentary" value="Collective" class="horlist" placeholder="documentarypik" required id="id_documentary_0" {% if hasballot and ballot.documentary == "Collective" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/collective.jpg' %}">
+                        <span>Collective</span><br>
+                        (Alexander Nanau and Bianca Oana)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="documentary" value="Crip Camp" class="horlist" placeholder="documentarypik" required id="id_documentary_1" {% if hasballot and ballot.documentary == "Crip Camp" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/crip_camp.jpg' %}">
+                        <span>Crip Camp</span><br>
+                        (Nicole Newnham, Jim LeBrecht and Sara Bolder)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="documentary" value="The Mole Agent" class="horlist1" placeholder="documentarypik" required id="id_documentary_2" {% if hasballot and ballot.documentary == "The Mole Agent" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_mole_agent.jpg' %}">
+                        <span>The Mole Agent</span><br>
+                        (Maite Alberdi and Marcela Santibáñez)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="documentary" value="My Octopus Teacher" class="horlist1" placeholder="documentarypik" required id="id_documentary_3" {% if hasballot and ballot.documentary == "My Octopus Teacher" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/my_octopus_teacher.jpg' %}">
+                        <span>My Octopus Teacher</span><br>
+                        (Pippa Ehrlich, James Reed and Craig Foster)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="documentary" value="Time" class="horlist1" placeholder="documentarypik" required id="id_documentary_4" {% if hasballot and ballot.documentary == "Time" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/time.jpg' %}">
+                        <span>Time</span><br>
+                        (Garrett Bradley, Lauren Domino and Kellen Quinn)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='doc_short'>DOCUMENTARY (SHORT SUBJECT)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="docshort" value="Colette" class="horlist" placeholder="docshort" required id="id_docshort_0" {% if hasballot and ballot.docshort == "Colette" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/colette.jpg' %}">
+                        <span>Colette</span><br>
+                        (Anthony Giacchino and Alice Doyard)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="docshort" value="A Concerto is a Conversation" class="horlist" placeholder="docshort" required id="id_docshort_1" {% if hasballot and ballot.docshort == "A Concerto is a Conversation" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/a_concerto_is_a_conversatio.jpg' %}">
+                        <span>A Concerto is a Conversation</span><br>
+                        (Ben Proudfoot and Kris Bowers)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="docshort" value="Do Not Split" class="horlist1" placeholder="docshort" required id="id_docshort_2" {% if hasballot and ballot.docshort == "Do Not Split" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/do_not_split.jpg' %}">
+                        <span>Do Not Split</span><br>
+                        (Anders Hammer and Charlotte Cook)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="docshort" value="Hunger Ward" class="horlist1" placeholder="docshort" required id="id_docshort_3" {% if hasballot and ballot.docshort == "Hunger Ward" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/hunger_ward.jpg' %}">
+                        <span>Hunger Ward</span><br>
+                        (Skye Fitzgerald and Michael Scheuerman)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="docshort" value="A Love Song For Latasha" class="horlist1" placeholder="docshort" required id="id_docshort_4" {% if hasballot and ballot.docshort == "A Love Song For Latasha" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/a_love_song_for_latasha.jpg' %}">
+                        <span>A Love Song For Latasha</span><br>
+                        (Sophia Nahli Allison and Janice Duncan)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='editing'>FILM EDITING</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="fediting" value="The Father" class="horlist" placeholder="feditingpik" required id="id_fediting_0" {% if hasballot and ballot.fediting == "The Father" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_father.jpg' %}">
+                        <span>The Father</span><br>
+                        (Yorgos Lamprinos)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="fediting" value="Nomadland" class="horlist" placeholder="feditingpik" required id="id_fediting_1" {% if hasballot and ballot.fediting == "Nomadland" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/nomadland.jpg' %}">
+                        <span>Nomadland</span><br>
+                        (Chloé Zhao)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="fediting" value="Promising Young Woman" class="horlist1" placeholder="feditingpik" required id="id_fediting_2" {% if hasballot and ballot.fediting == "Promising Young Woman" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/promising_young_woman.jpg' %}">
+                        <span>Promising Young Woman</span><br>
+                        (Frédéric Thoraval)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="fediting" value="Sound of Metal" class="horlist1" placeholder="feditingpik" required id="id_fediting_3" {% if hasballot and ballot.fediting == "Sound of Metal" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/sound_of_metal.jpg' %}">
+                        <span>Sound of Metal</span><br>
+                        (Mikkel E. G. Nielsen)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="fediting" value="The Trial of the Chicago 7" class="horlist1" placeholder="feditingpik" required id="id_fediting_4" {% if hasballot and ballot.fediting == "The Trial of the Chicago 7" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/trial_of_the_chicago_7.jpg' %}">
+                        <span>The Trial of the Chicago 7</span><br>
+                        (Alan Baumgarten)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='foreign'>INTERNATIONAL FEATURE FILM</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="foreign" value="Another Round" class="horlist" placeholder="foreignlangpik" required id="id_foreign_0" {% if hasballot and ballot.foreign == "Another Round" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/another_round.jpg' %}">
+                        <span>Another Round</span><br>
+                        (Denmark)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="foreign" value="Better Days" class="horlist" placeholder="foreignlangpik" required id="id_foreign_1" {% if hasballot and ballot.foreign == "Better Days" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/better_days.jpg' %}">
+                        <span>Better Days</span><br>
+                        (Hong Kong)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="foreign" value="Collective" class="horlist1" placeholder="foreignlangpik" required id="id_foreign_2" {% if hasballot and ballot.foreign == "Collective" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/collective.jpg' %}">
+                        <span>Collective</span><br>
+                        (Romania)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="foreign" value="The Man Who Sold His Skin" class="horlist1" placeholder="foreignlangpik" required id="id_foreign_3" {% if hasballot and ballot.foreign == "The Man Who Sold His Skin" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_man_who_sold_his_skin.jpg' %}">
+                        <span>The Man Who Sold His Skin</span><br>
+                        (Tunisia)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="foreign" value="Quo Vadis, Aida?" class="horlist1" placeholder="foreignlangpik" required id="id_foreign_4" {% if hasballot and ballot.foreign == "Quo Vadis, Aida?" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/quo_vadis_aida.jpg' %}">
+                        <span>Quo Vadis, Aida?</span><br>
+                        (Bosnia and Herzegovina)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='makeup'>MAKEUP AND HAIRSTYLING</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="makeupandh" value="Emma" class="horlist" placeholder="makeupandhpik" required id="id_makeupandh_0" {% if hasballot and ballot.makeupandh == "Emma" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/emma.jpg' %}">
+                        <span>Emma</span><br>
+                        (Marese Langan, Laura Allen and Claudia Stolze)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="makeupandh" value="Hillbilly Elegy" class="horlist" placeholder="makeupandhpik" required id="id_makeupandh_1" {% if hasballot and ballot.makeupandh == "Hillbilly Elegy" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/hillbilly_elegy.jpg' %}">
+                        <span>Hillbilly Elegy</span><br>
+                        (Eryn Krueger Mekash, Matthew Mungle and Patricia Dehaney)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="makeupandh" value="Ma Rainey's Black Bottom" class="horlist1" placeholder="makeupandhpik" required id="id_makeupandh_2" {% if hasballot and ballot.makeupandh == "Ma Rainey's Black Bottom" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/ma_rainey.jpg' %}">
+                        <span>Ma Rainey's Black Bottom</span><br>
+                        (Sergio Lopez-Rivera, Mia Neal and Jamika Wilson)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="makeupandh" value="Mank" class="horlist1" placeholder="makeupandhpik" required id="id_makeupandh_3" {% if hasballot and ballot.makeupandh == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (Gigi Williams, Kimberley Spiteri and Colleen LaBaff)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="makeupandh" value="Pinocchio" class="horlist1" placeholder="makeupandhpik" required id="id_makeupandh_4" {% if hasballot and ballot.makeupandh == "Pinocchio" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/pinocchio.jpg' %}">
+                        <span>Pinocchio</span><br>
+                        (Mark Coulier, Dalia Colli and Francesco Pegoretti)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='score'>MUSIC (ORIGINAL SCORE)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="mscore" value="Da 5 Bloods" class="horlist" placeholder="musicscorepik" required id="id_mscore_0" {% if hasballot and ballot.mscore == "Da 5 Bloods" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_da_5_bloods.jpg' %}">
+                        <span>Da 5 Bloods</span><br>
+                        (Terence Blanchard)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="mscore" value="Mank" class="horlist" placeholder="musicscorepik" required id="id_mscore_1" {% if hasballot and ballot.mscore == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (Trent Reznor and Atticus Ross)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="mscore" value="Minari" class="horlist1" placeholder="musicscorepik" required id="id_mscore_2" {% if hasballot and ballot.mscore == "Minari" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_minari.jpg' %}">
+                        <span>Minari</span><br>
+                        (Emile Mosseri)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="mscore" value="News of the World" class="horlist1" placeholder="musicscorepik" required id="id_mscore_3" {% if hasballot and ballot.mscore == "News of the World" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_news_of_the_world.jpg' %}">
+                        <span>News of the World</span><br>
+                        (James Newton Howard)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="mscore" value="Soul" class="horlist1" placeholder="musicscorepik" required id="id_mscore_4" {% if hasballot and ballot.mscore == "Soul" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_soul.jpg' %}">
+                        <span>Soul</span><br>
+                        (Trent Reznor, Atticus Ross, and Jon Batiste)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='song'>MUSIC (ORIGINAL SONG)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="msong" value="Fight For You" class="horlist" placeholder="musicsongpik" required id="id_msong_0" {% if hasballot and ballot.msong == "Fight For You" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_judas_and_the_black_messi.jpg' %}">
+                        <span>Fight For You</span><br>
+                        (Judas and the Black Messiah)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="msong" value="Hear My Voice" class="horlist" placeholder="musicsongpik" required id="id_msong_1" {% if hasballot and ballot.msong == "Hear My Voice" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_trial_of_the_chicago_7.jpg' %}">
+                        <span>Hear My Voice</span><br>
+                        (The Trial of the Chicago 7)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="msong" value="Husavik" class="horlist1" placeholder="musicsongpik" required id="id_msong_2" {% if hasballot and ballot.msong == "Husavik" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_fire_saga.jpg' %}">
+                        <span>Husavik</span><br>
+                        (Eurovision Song Contest: The Story of Fire Saga)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="msong" value="Io Si (Seen)" class="horlist1" placeholder="musicsongpik" required id="id_msong_3" {% if hasballot and ballot.msong == "Io Si (Seen)" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_the_life_ahead.jpg' %}">
+                        <span>Io Si (Seen)</span><br>
+                        (The Life Ahead (La Vita Davanti A Se))
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="msong" value="Speak Now" class="horlist1" placeholder="musicsongpik" required id="id_msong_4" {% if hasballot and ballot.msong == "Speak Now" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/s_one_night_in_miami.jpg' %}">
+                        <span>Speak Now</span><br>
+                        (One Night in Miami...)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='production'>PRODUCTION DESIGN</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="prodesign" value="The Father" class="horlist" placeholder="productionpik" required id="id_prodesign_0" {% if hasballot and ballot.prodesign == "The Father" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_father.jpg' %}">
+                        <span>The Father</span><br>
+                        (Production Design: Peter Francis; Set Decoration: Cathy Featherstone)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="prodesign" value="Ma Rainey's Black Bottom" class="horlist" placeholder="productionpik" required id="id_prodesign_1" {% if hasballot and ballot.prodesign == "Ma Rainey's Black Bottom" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/ma_rainey.jpg' %}">
+                        <span>Ma Rainey's Black Bottom</span><br>
+                        (Production Design: Mark Ricker; Set Decoration: Karen O'Hara and Diana Stoughton)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="prodesign" value="Mank" class="horlist1" placeholder="productionpik" required id="id_prodesign_2" {% if hasballot and ballot.prodesign == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (Production Design: Donald Graham Burt; Set Decoration: Jan Pascale)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="prodesign" value="News of the World" class="horlist1" placeholder="productionpik" required id="id_prodesign_3" {% if hasballot and ballot.prodesign == "News of the World" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/news_of_the_world.jpg' %}">
+                        <span>News of the World</span><br>
+                        (Production Design: David Crank; Set Decoration: Elizabeth Keenan)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="prodesign" value="Tenet" class="horlist1" placeholder="productionpik" required id="id_prodesign_4" {% if hasballot and ballot.prodesign == "Tenet" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/tenet.jpg' %}">
+                        <span>Tenet</span><br>
+                        (Production Design: Nathan Crowley; Set Decoration: Kathy Lucas)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='anim_short'>SHORT FILM (ANIMATED)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="animatedshort" value="Burrow" class="horlist" placeholder="animatedshortpik" required id="id_animatedshort_0" {% if hasballot and ballot.animatedshort == "Burrow" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/burrow.jpg' %}">
+                        <span>Burrow</span><br>
+                        (Madeline Sharafian and Michael Capbarat)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="animatedshort" value="Genius Loci" class="horlist" placeholder="animatedshortpik" required id="id_animatedshort_1" {% if hasballot and ballot.animatedshort == "Genius Loci" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/genius_loci.jpg' %}">
+                        <span>Genius Loci</span><br>
+                        (Adrien Mérigeau and Amaury Ovise)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="animatedshort" value="If Anything Happens I Love You" class="horlist1" placeholder="animatedshortpik" required id="id_animatedshort_2" {% if hasballot and ballot.animatedshort == "If Anything Happens I Love You" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/if_anything_happens_i_love_.jpg' %}">
+                        <span>If Anything Happens I Love You</span><br>
+                        (Will McCormack and Michael Govier)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="animatedshort" value="Opera" class="horlist1" placeholder="animatedshortpik" required id="id_animatedshort_3" {% if hasballot and ballot.animatedshort == "Opera" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/opera.jpg' %}">
+                        <span>Opera</span><br>
+                        (Erick Oh)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="animatedshort" value="Yes-People" class="horlist1" placeholder="animatedshortpik" required id="id_animatedshort_4" {% if hasballot and ballot.animatedshort == "Yes-People" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/yes-people.jpg' %}">
+                        <span>Yes-People</span><br>
+                        (Gísli Darri Halldórsson and Arnar Gunnarsson)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='live_short'>SHORT FILM (LIVE ACTION)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="shortfilm" value="Feeling Through" class="horlist" placeholder="shortfilmpik" required id="id_shortfilm_0" {% if hasballot and ballot.shortfilm == "Feeling Through" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/feeling_through.jpg' %}">
+                        <span>Feeling Through</span><br>
+                        (Doug Roland and Susan Ruzenski)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="shortfilm" value="The Letter Room" class="horlist" placeholder="shortfilmpik" required id="id_shortfilm_1" {% if hasballot and ballot.shortfilm == "The Letter Room" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_letter_room.jpg' %}">
+                        <span>The Letter Room</span><br>
+                        (Elvira Lind and Sofia Sondervan)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="shortfilm" value="The Present" class="horlist1" placeholder="shortfilmpik" required id="id_shortfilm_2" {% if hasballot and ballot.shortfilm == "The Present" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_present.jpg' %}">
+                        <span>The Present</span><br>
+                        (Farah Nabulsi and Ossama Bawardi)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="shortfilm" value="Two Distant Strangers" class="horlist1" placeholder="shortfilmpik" required id="id_shortfilm_3" {% if hasballot and ballot.shortfilm == "Two Distant Strangers" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/two_distant_strangers.jpg' %}">
+                        <span>Two Distant Strangers</span><br>
+                        (Travon Free and Martin Desmond Roe)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="shortfilm" value="White Eye" class="horlist1" placeholder="shortfilmpik" required id="id_shortfilm_4" {% if hasballot and ballot.shortfilm == "White Eye" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/white_eye.jpg' %}">
+                        <span>White Eye</span><br>
+                        (Tomer Shushan and Shira Hochman)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='sound'>SOUND</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="sound" value="Greyhound" class="horlist" placeholder="soundpik" required id="id_sound_0" {% if hasballot and ballot.sound == "Greyhound" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/greyhound.jpg' %}">
+                        <span>Greyhound</span><br>
+                        (Warren Shaw, Michael Minkler, Beau Borders and David Wyman)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="sound" value="Mank" class="horlist" placeholder="soundpik" required id="id_sound_1" {% if hasballot and ballot.sound == "Mank" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mank.jpg' %}">
+                        <span>Mank</span><br>
+                        (Ren Klyce, Jeremy Molod, David Parker, Nathan Nance and Drew Kunin)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="sound" value="News of the World" class="horlist1" placeholder="soundpik" required id="id_sound_2" {% if hasballot and ballot.sound == "News of the World" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/news_of_the_world.jpg' %}">
+                        <span>News of the World</span><br>
+                        (Oliver Tarney, Mike Prestwood Smith, William Miller and John Pritchett)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="sound" value="Sound of Metal" class="horlist1" placeholder="soundpik" required id="id_sound_3" {% if hasballot and ballot.sound == "Sound of Metal" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/sound_of_metal.jpg' %}">
+                        <span>Sound of Metal</span><br>
+                        (Nicolas Becker, Jaime Baksht, Michellee Couttolenc, Carlos Cortés and Phillip Bladh)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="sound" value="Soul" class="horlist1" placeholder="soundpik" required id="id_sound_4" {% if hasballot and ballot.sound == "Soul" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/soul.jpg' %}">
+                        <span>Soul</span><br>
+                        (Ren Klyce, Coya Elliott and David Parker)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='fx'>VISUAL EFFECTS</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="visualfx" value="Love and Monsters" class="horlist" placeholder="visualeffectspik" required id="id_visualfx_0" {% if hasballot and ballot.visualfx == "Love and Monsters" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/love_and_monsters.jpg' %}">
+                        <span>Love and Monsters</span><br>
+                        (Matt Sloan, Genevieve Camilleri, Matt Everitt and Brian Cox)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="visualfx" value="The Midnight Sky" class="horlist" placeholder="visualeffectspik" required id="id_visualfx_1" {% if hasballot and ballot.visualfx == "The Midnight Sky" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_midnight_sky.jpg' %}">
+                        <span>The Midnight Sky</span><br>
+                        (Matthew Kasmir, Christopher Lawrence, Max Solomon and David Watkins)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="visualfx" value="Mulan" class="horlist1" placeholder="visualeffectspik" required id="id_visualfx_2" {% if hasballot and ballot.visualfx == "Mulan" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/mulan.jpg' %}">
+                        <span>Mulan</span><br>
+                        (Sean Faden, Anders Langlands, Seth Maury and Steve Ingram)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="visualfx" value="The One and Only Ivan" class="horlist1" placeholder="visualeffectspik" required id="id_visualfx_3" {% if hasballot and ballot.visualfx == "The One and Only Ivan" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_one_and_only_ivan.jpg' %}">
+                        <span>The One and Only Ivan</span><br>
+                        (Nick Davis, Greg Fisher, Ben Jones and Santiago Colomo Martinez)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="visualfx" value="Tenet" class="horlist1" placeholder="visualeffectspik" required id="id_visualfx_4" {% if hasballot and ballot.visualfx == "Tenet" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/tenet.jpg' %}">
+                        <span>Tenet</span><br>
+                        (Andrew Jackson, David Lee, Andrew Lockley and Scott Fisher)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='adapted_screenplay'>WRITING (ADAPTED SCREENPLAY)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="writingad" value="Borat Subsequent Moviefilm" class="horlist" placeholder="writingadaptedpik" required id="id_writingad_0" {% if hasballot and ballot.writingad == "Borat Subsequent Moviefilm" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/borat.jpg' %}">
+                        <span>Borat Subsequent Moviefilm: Delivery of Prodigious Bribe to American Regime for Make Benefit Once Glorious Nation of Kazakhstan</span><br>
+                        (Sacha Baron Cohen, Anthony Hines, Dan Swimmer, Peter Baynham, Erica Rivinoja, Dan Mazer, Jena Friedman, and Lee Kern)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingad" value="The Father" class="horlist" placeholder="writingadaptedpik" required id="id_writingad_1" {% if hasballot and ballot.writingad == "The Father" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_father.jpg' %}">
+                        <span>The Father</span><br>
+                        (Christopher Hampton and Florian Zeller)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingad" value="Nomadland" class="horlist1" placeholder="writingadaptedpik" required id="id_writingad_2" {% if hasballot and ballot.writingad == "Nomadland" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/nomadland.jpg' %}">
+                        <span>Nomadland</span><br>
+                        (Chloé Zhao)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingad" value="One Night in Miami..." class="horlist1" placeholder="writingadaptedpik" required id="id_writingad_3" {% if hasballot and ballot.writingad == "One Night in Miami..." %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/one_night_in_miami.jpg' %}">
+                        <span>One Night in Miami...</span><br>
+                        (Kemp Powers)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingad" value="The White Tiger" class="horlist1" placeholder="writingadaptedpik" required id="id_writingad_4" {% if hasballot and ballot.writingad == "The White Tiger" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/the_white_tiger.jpg' %}">
+                        <span>The White Tiger</span><br>
+                        (Ramin Bahrani)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="comment" class="sr-only" id='original_screenplay'>WRITING (ORIGINAL SCREENPLAY)</label>
+
+            <ul class="radiolist">
+                <li><label>
+                    <input type="radio" name="writingor" value="Judas and the Black Messiah" class="horlist" placeholder="writingoriginalpik" required id="id_writingor_0" {% if hasballot and ballot.writingor == "Judas and the Black Messiah" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/judas_and_the_black_messiah.jpg' %}">
+                        <span>Judas and the Black Messiah</span><br>
+                        (Will Berson and Shaka King)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingor" value="Minari" class="horlist" placeholder="writingoriginalpik" required id="id_writingor_1" {% if hasballot and ballot.writingor == "Minari" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/minari.jpg' %}">
+                        <span>Minari</span><br>
+                        (Lee Isaac Chung)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingor" value="Promising Young Woman" class="horlist1" placeholder="writingoriginalpik" required id="id_writingor_2" {% if hasballot and ballot.writingor == "Promising Young Woman" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/promising_young_woman.jpg' %}">
+                        <span>Promising Young Woman</span><br>
+                        (Emerald Fennell)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingor" value="Sound of Metal" class="horlist1" placeholder="writingoriginalpik" required id="id_writingor_3" {% if hasballot and ballot.writingor == "Sound of Metal" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/sound_of_metal.jpg' %}">
+                        <span>Sound of Metal</span><br>
+                        (Darius Marder & Abraham Marder)
+                    </div>
+                </label></li>
+                <li><label>
+                    <input type="radio" name="writingor" value="The Trial of the Chicago 7" class="horlist1" placeholder="writingoriginalpik" required id="id_writingor_4" {% if hasballot and ballot.writingor == "The Trial of the Chicago 7" %}checked{% endif %}>
+                    <div>
+                        <img width="100%" src="{% static 'ceccimages/poster/trial_of_the_chicago_7.jpg' %}">
+                        <span>The Trial of the Chicago 7</span><br>
+                        (Aaron Sorkin)
+                    </div>
+                </label></li>
+            </ul>
+        </div>
+
+        <button type="submit" value="Submit" class="submitbutton">Submit Ballot</button>
+    </form>
+    <div style="height: 20vmin"></div>
+
+</div> <!-- /container -->
+
+<script>
+    function openNav() {
+      document.getElementById("side_nav").style.transform = "translate(0%, 0%)";
+    }
+
+    function closeNav() {
+      document.getElementById("side_nav").style.transform = "translate(-100%, 0%)";
+    }
+</script>
+{% endblock %}

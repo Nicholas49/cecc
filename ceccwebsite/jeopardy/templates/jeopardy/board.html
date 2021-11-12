@@ -1,0 +1,421 @@
+{% extends 'jeopardy/jbase.html' %}
+{% load static %}
+
+{% block title %}{{ game_name }} - Jeopardy{% endblock %}
+
+{% block content %}
+
+    <div style='text-align: center'>
+        <img src="{% static 'ceccimages/jeopardy.svg' %}" class='jheader'>
+    </div>
+
+    <ul class='scorebar'>
+        <li style='padding: 0px'>
+            <form method='GET' action='../move_turn'>
+                <input type='text' value='{{ game_name }}' name='gname' style='display: none'>
+                <input type='text' value='single' name='round' style='display: none'>
+                <input type='text' value='b' name='direc' style='display: none'>
+                <button type='submit' class='incr'>&#9001;</button>
+            </form>
+        </li>
+        {% for t in teams %}
+            <li {% if t.teamno == wiz.turn %}style='background-color: #0044ff'{% endif %}>
+                <form method='GET' action='../editteam'>
+                <span style='color: #ffbb00'>Team {{ t.teamno }}</span><br>
+                <input type='text' value='{{ game_name }}' name='gname' style='display: none'>
+                <input type='text' value='single' name='round' style='display: none'>
+                <input type='number' value='{{ t.teamno }}' name='tno' style='display: none'>
+                <input type='text' value='{{ t.teamname }}' name='tname' onfocusout='teamedit(this)'>: $<input type='number' value='{{ t.points }}' name='score' onfocusout='teamedit(this)'><br>
+                </form>
+            </li>
+        {% endfor %}
+        <li style='padding: 0px'>
+            <form method='GET' action='../move_turn'>
+                <input type='text' value='{{ game_name }}' name='gname' style='display: none'>
+                <input type='text' value='single' name='round' style='display: none'>
+                <input type='text' value='f' name='direc' style='display: none'>
+                <button type='submit' class='incr'>&#9002;</button>
+            </form>
+        </li>
+    </ul>
+
+    <div style='padding: 1vw; background-color: #000066; border-radius: 1vw'>
+        <table class='jboard'>
+            <tr>
+                <th style='border-radius: 2vw 2vw 2vw 2vw'>
+                    {% for c in categories %}
+                        {% if c.category == 'cat1' %}
+                            {{ c.catname }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for a in answers %}
+                        {% if a.category == 'cat1' and a.dollar == 'ex'  and a.isactive %}
+                            <form method='GET' action='../showexample/{{ game_name }}/cat1' onsubmit="disableb()">
+                                <button type='submit'>ex</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for c in categories %}
+                        {% if c.category == 'cat2' %}
+                            {{ c.catname }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for a in answers %}
+                        {% if a.category == 'cat2' and a.dollar == 'ex'  and a.isactive %}
+                            <form method='GET' action='../showexample/{{ game_name }}/cat2' onsubmit="disableb()">
+                                <button type='submit'>ex</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for c in categories %}
+                        {% if c.category == 'cat3' %}
+                            {{ c.catname }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for a in answers %}
+                        {% if a.category == 'cat3' and a.dollar == 'ex'  and a.isactive %}
+                            <form method='GET' action='../showexample/{{ game_name }}/cat3' onsubmit="disableb()">
+                                <button type='submit'>ex</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for c in categories %}
+                        {% if c.category == 'cat4' %}
+                            {{ c.catname }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for a in answers %}
+                        {% if a.category == 'cat4' and a.dollar == 'ex'  and a.isactive %}
+                            <form method='GET' action='../showexample/{{ game_name }}/cat4' onsubmit="disableb()">
+                                <button type='submit'>ex</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for c in categories %}
+                        {% if c.category == 'cat5' %}
+                            {{ c.catname }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for a in answers %}
+                        {% if a.category == 'cat5' and a.dollar == 'ex'  and a.isactive %}
+                            <form method='GET' action='../showexample/{{ game_name }}/cat5' onsubmit="disableb()">
+                                <button type='submit'>ex</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+                <th>
+                    {% for c in categories %}
+                        {% if c.category == 'cat6' %}
+                            {{ c.catname }}
+                        {% endif %}
+                    {% endfor %}
+                    {% for a in answers %}
+                        {% if a.category == 'cat6' and a.dollar == 'ex'  and a.isactive %}
+                            <form method='GET' action='../showexample/{{ game_name }}/cat6' onsubmit="disableb()">
+                                <button type='submit'>ex</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat1' and a.dollar == '200' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat1/200' onsubmit="disableb()">
+                                <button type='submit'>$200</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat2' and a.dollar == '200' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat2/200' onsubmit="disableb()">
+                                <button type='submit'>$200</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat3' and a.dollar == '200' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat3/200' onsubmit="disableb()">
+                                <button type='submit'>$200</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat4' and a.dollar == '200' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat4/200' onsubmit="disableb()">
+                                <button type='submit'>$200</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat5' and a.dollar == '200' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat5/200' onsubmit="disableb()">
+                                <button type='submit'>$200</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat6' and a.dollar == '200' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat6/200' onsubmit="disableb()">
+                                <button type='submit'>$200</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat1' and a.dollar == '400' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat1/400' onsubmit="disableb()">
+                                <button type='submit'>$400</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat2' and a.dollar == '400' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat2/400' onsubmit="disableb()">
+                                <button type='submit'>$400</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat3' and a.dollar == '400' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat3/400' onsubmit="disableb()">
+                                <button type='submit'>$400</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat4' and a.dollar == '400' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat4/400' onsubmit="disableb()">
+                                <button type='submit'>$400</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat5' and a.dollar == '400' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat5/400' onsubmit="disableb()">
+                                <button type='submit'>$400</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat6' and a.dollar == '400' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat6/400' onsubmit="disableb()">
+                                <button type='submit'>$400</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat1' and a.dollar == '600' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat1/600' onsubmit="disableb()">
+                                <button type='submit'>$600</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat2' and a.dollar == '600' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat2/600' onsubmit="disableb()">
+                                <button type='submit'>$600</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat3' and a.dollar == '600' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat3/600' onsubmit="disableb()">
+                                <button type='submit'>$600</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat4' and a.dollar == '600' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat4/600' onsubmit="disableb()">
+                                <button type='submit'>$600</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat5' and a.dollar == '600' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat5/600' onsubmit="disableb()">
+                                <button type='submit'>$600</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat6' and a.dollar == '600' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat6/600' onsubmit="disableb()">
+                                <button type='submit'>$600</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat1' and a.dollar == '800' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat1/800' onsubmit="disableb()">
+                                <button type='submit'>$800</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat2' and a.dollar == '800' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat2/800' onsubmit="disableb()">
+                                <button type='submit'>$800</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat3' and a.dollar == '800' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat3/800' onsubmit="disableb()">
+                                <button type='submit'>$800</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat4' and a.dollar == '800' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat4/800' onsubmit="disableb()">
+                                <button type='submit'>$800</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat5' and a.dollar == '800' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat5/800' onsubmit="disableb()">
+                                <button type='submit'>$800</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat6' and a.dollar == '800' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat6/800' onsubmit="disableb()">
+                                <button type='submit'>$800</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat1' and a.dollar == '1000' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat1/1000' onsubmit="disableb()">
+                                <button type='submit'>$1000</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat2' and a.dollar == '1000' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat2/1000' onsubmit="disableb()">
+                                <button type='submit'>$1000</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat3' and a.dollar == '1000' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat3/1000' onsubmit="disableb()">
+                                <button type='submit'>$1000</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat4' and a.dollar == '1000' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat4/1000' onsubmit="disableb()">
+                                <button type='submit'>$1000</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat5' and a.dollar == '1000' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat5/1000' onsubmit="disableb()">
+                                <button type='submit'>$1000</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for a in answers %}
+                        {% if a.category == 'cat6' and a.dollar == '1000' and a.isactive %}
+                            <form method='GET' action='../showanswer1/{{ game_name }}/cat6/1000' onsubmit="disableb()">
+                                <button type='submit'>$1000</button>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    </div><br>
+
+    <center>
+        <h3>
+            <span style='background-color: #0000aa; padding: 10px; border-radius: 10px;'>Single</span>
+            <a href='../double/{{ game_name }}'>Double</a>
+            <a href='../final/{{ game_name }}'>Final</a>
+        </h3>
+    </center>
+
+{% endblock %}

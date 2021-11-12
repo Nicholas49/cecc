@@ -1,0 +1,355 @@
+@font-face {
+    font-family: sofia;
+    src: url("/static/ceccimages/headshot/sofiapro-light.otf") format("opentype");
+}
+
+html {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #222;
+    color:#fff;
+    font-family: sofia, arial, helvetica, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 3.5em;
+    color: #B7A261;
+}
+
+/* Navigation Stuff */
+
+.nav {
+    margin: 0px auto;
+    table-layout: fixed;
+    width: 100vmin;
+    text-align: center;
+}
+
+.tab a div {
+    width: 60%;
+    margin: auto;
+    font-size: 3vmin;
+    border-bottom: 4px solid #282828;
+    color: #fff;
+}
+
+.tab a div:hover {
+    color: #B7A261;
+}
+
+.container {
+    width: 100%;
+}
+
+.theme-dropdown .dropdown-menu {
+    position: static;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+    margin: 5px 0;
+}
+
+/* Main Page Stuff */
+
+.maintable {
+    background-color: #333;
+    display: inline-table;
+    transition: width 1s;
+}
+
+.maintable td {
+    height: 7vh;
+    padding: 0px;
+}
+.maintable tr:nth-child(even) {
+    background-color: #444;
+}
+
+.maintable td div div{
+    padding-top: 2vh;
+    font-size: 3.5vmin;
+    width: 20vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scoretext{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 4vmin;
+    transition: font-size 1s;
+}
+
+.otable {
+    table-layout: fixed;
+    background-color: white;
+    color: black;
+    width: 76vw;
+    position: absolute;
+    right: -76vw;
+    top: 0px;
+    transition: right 1s;
+    white-space: normal;
+}
+
+.otable td {
+    font-size: 2vmin;
+    text-align: center;
+}
+.otable tr:nth-child(even) {background-color: #f2f2f2}
+.otable tr:hover {background-color: #abc; color: #fff}
+.otable th{
+    padding: 0.5vmin;
+    font-size: 2vmin;
+    text-align: right;
+    background-color: #048;
+    color: #fff;
+}
+
+.toprow th{
+    text-align: center;
+}
+
+.buttondiv {
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+}
+
+.headr {
+    font-size:6vmin;
+    color:#B7A261;
+}
+.side {
+    text-align: center;
+}
+.ce {
+    text-align: center;
+    margin: 0;
+}
+
+/* Big Chart Stuff */
+
+.bigchart {
+    background-color: #222222;
+    color: #fff;
+    width: 100%;
+}
+.bigchart td, #calendert tr {
+    text-align: center; padding: 2px;
+}
+.bigchart tr:nth-child(even) {
+    background-color: #333333;
+}
+.bigchart tr:hover {
+    background-color: #444444;
+}
+.bigchart th{
+    background-color: #B7A261; color: #fff; padding: 5px;
+}
+.bigchart .calkey {
+    text-align: right; background-color: #B7A261;
+}
+
+/* Ballot */
+
+.horlist1 {
+    padding: 0px;
+    margin: 0px;
+}
+.horlist1 li {
+    display: inline;
+    margin-left: 4.5%;
+    margin-right: 4.5%;
+}
+
+.horlist {
+    padding: 0px;
+    margin: 0px;
+}
+.horlist li {
+    display: inline;
+    margin-left: 7.3%;
+    margin-right: 7.3%;
+}
+
+.form-signin div {
+    margin-bottom: 50px;
+}
+
+.form-group {
+    text-align: center;
+    padding-top: 50px;
+}
+
+.sr-only {
+    /*width: 200px;*/
+    color: #B7A261;
+    font-size: 2.5em;
+}
+
+.postertab1 {
+    margin: auto;
+    text-align: center;
+}
+
+.postertab1 td{
+    padding: 6px;
+    width: 9.4vw;
+    font-size: 1.3vw;
+}
+
+.postertab {
+    margin: auto;
+    text-align: center;
+}
+
+.postertab td{
+    padding: 0px;
+    width: 15vw;
+    font-size: 1.5vw;
+    background-color: #333333;
+    border-right: 1vmin solid #222222;
+}
+
+.postertab td span {
+    font-size: 2vw;
+}
+
+.submitbutton {
+    display: block;
+    padding: 12px;
+    width: 90%;
+    max-width: 200px;
+    background-color: #555;
+    border: 0px;
+    color: white;
+    font-size: 100%;
+    transition: background-color 0.4s;
+    margin: auto;
+}
+
+.submitbutton:hover {
+    background-color: #B7A261;
+}
+
+.radiolist {
+    text-align: center;
+    padding: 0px;
+}
+
+.radiolist li {
+    width: 35%;
+    max-width: 300px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.radiolist div {
+    background-color: #444444;
+    width: 96%;
+    border: 2% solid #222222;
+    padding-bottom: 10px;
+}
+
+.radiolist div:hover {
+    background-color: #666666;
+    border: 2% solid #666666;
+}
+
+.radiolist input {
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.radiolist input:checked ~ div {
+    background-color: #B7A261;
+    border: 2% solid #B7A261;
+
+}
+
+.radiolist li img {
+    width: 100%;
+}
+
+.radiolist span {
+    font-size: 1.5em;
+}
+
+.inputfield {
+    border: 0px;
+    background-color: #A99453;
+    padding: 12px;
+    width: 84%;
+    max-width: 250px;
+    transition: background-color 0.5s;
+    color: #ffffff;
+    text-align: center;
+    outline: none;
+    margin: 0px 0px 8px 0px;
+}
+
+.inputfield:focus {
+    background-color: #998443;
+}
+
+.inputfield::placeholder {
+    color: #ffffdd;
+}
+
+.kulr {
+    width: 60px;
+    height: 60px;
+}
+
+.showbutton{
+    width: 30px;
+    height: 30px;
+    background-image: url("https://01as.pythonanywhere.com/static/ceccimages/poster/hideeye.png");
+    background-size: 100% 100%;
+}
+
+.opend {
+    background-image: url("https://01as.pythonanywhere.com/static/ceccimages/poster/showeye.png");
+}
+
+#show {
+    position: absolute;
+    visibility: hidden;
+}
+
+#side_nav a {
+    line-height: 1.5;
+}
+
+#side_nav a:link, #side_nav a:visited, #side_nav a:active {
+    color: #ffffff;
+    font-size: 20px;
+}
+
+#side_nav a:hover {
+    color: #0000aa;
+}
+

@@ -1,0 +1,259 @@
+{% extends 'oscarsapp/oscbase.html' %}'
+{% load static %}
+{% block title %}Chart{% endblock %}
+{% block stylelinks %}<link href="{% static 'cecc/oscartheme.css' %}" rel="stylesheet">{% endblock %}
+{% block styles %}
+
+#alnk {
+{% endblock %}
+{% block content %}
+<div role="main">
+    <table class='bigchart'>
+        <tr>
+            <th>Category</th>
+            <th>Winner</th>
+      {% for c in commentz %}
+            <th colspan='2' style='background-color: {{ c.kulr }}'>{{ c.name }}</th>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Best Picture</th>
+            <td>{{ wn.bestpicture }}</td>
+      {% for c in commentz %}
+            <td {% if c.bestpicture == wn.bestpicture %} style='color:{{ wincolor }}'{% endif %}>{{ c.bestpicture }}</td>
+            <td>
+            {% if c.bestpicture == wn.bestpicture %}<p>+3</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Lead Actor</th>
+            <td>{{ wn.actor }}</td>
+      {% for c in commentz %}
+            <td {% if c.actor == wn.actor %} style='color:{{ wincolor }}'{% endif %}>{{ c.actor }}</td>
+            <td>
+            {% if c.actor == wn.actor %}<p>+3</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Lead Actress</th>
+            <td>{{ wn.actress }}</td>
+      {% for c in commentz %}
+            <td {% if c.actress == wn.actress %} style='color:{{ wincolor }}'{% endif %}>{{ c.actress}}</td>
+            <td>
+            {% if c.actress == wn.actress %}<p>+3</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Supporting Actor</th>
+            <td>{{ wn.supactor }}</td>
+      {% for c in commentz %}
+            <td {% if c.supactor == wn.supactor %} style='color:{{ wincolor }}'{% endif %}>{{ c.supactor }}</td>
+            <td>
+            {% if c.supactor == wn.supactor %}<p>+2</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Supporting Actress</th>
+            <td>{{ wn.supactress }}</td>
+      {% for c in commentz %}
+            <td {% if c.supactress == wn.supactress %} style='color:{{ wincolor }}'{% endif %}>{{ c.supactress }}</td>
+                        <td>
+            {% if c.supactress == wn.supactress %}<p>+2</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Animated Feature</th>
+            <td>{{ wn.animatedfeature }}</td>
+      {% for c in commentz %}
+            <td {% if c.animatedfeature == wn.animatedfeature %} style='color:{{ wincolor }}'{% endif %}>{{ c.animatedfeature }}</td>
+            <td>
+            {% if c.animatedfeature == wn.animatedfeature %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Cinematography</th>
+            <td>{{ wn.cinematography }}</td>
+      {% for c in commentz %}
+            <td {% if c.cinematography == wn.cinematography %} style='color:{{ wincolor }}'{% endif %}>{{ c.cinematography }}</td>
+            <td>
+            {% if c.cinematography == wn.cinematography %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Costume Design</th>
+            <td>{{ wn.costume }}</td>
+      {% for c in commentz %}
+            <td {% if c.costume == wn.costume %} style='color:{{ wincolor }}'{% endif %}>{{ c.costume }}</td>
+            <td>
+            {% if c.costume == wn.costume %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Directing</th>
+            <td>{{ wn.directing }}</td>
+      {% for c in commentz %}
+            <td {% if c.directing == wn.directing %} style='color:{{ wincolor }}'{% endif %}>{{ c.directing }}</td>
+            <td>
+            {% if c.directing == wn.directing %}<p>+2</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Documentary</th>
+            <td>{{ wn.documentary }}</td>
+      {% for c in commentz %}
+            <td {% if c.documentary == wn.documentary %} style='color:{{ wincolor }}'{% endif %}>{{ c.documentary }}</td>
+            <td>
+            {% if c.documentary == wn.documentary %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Documentary Short</th>
+            <td>{{ wn.docshort }}</td>
+      {% for c in commentz %}
+            <td {% if c.docshort == wn.docshort %} style='color:{{ wincolor }}'{% endif %}>{{ c.docshort }}</td>
+            <td>
+            {% if c.docshort == wn.docshort %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Film Editing</th>
+            <td>{{ wn.fediting }}</td>
+      {% for c in commentz %}
+            <td {% if c.fediting == wn.fediting %} style='color:{{ wincolor }}'{% endif %}>{{ c.fediting }}</td>
+            <td>
+            {% if c.fediting == wn.fediting %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Foreign Language</th>
+            <td>{{ wn.foreign }}</td>
+      {% for c in commentz %}
+            <td {% if c.foreign == wn.foreign %} style='color:{{ wincolor }}'{% endif %}>{{ c.foreign }}</td>
+            <td>
+            {% if c.foreign == wn.foreign %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Makeup and Hairstyling</th>
+            <td>{{ wn.makeupandh }}</td>
+      {% for c in commentz %}
+            <td {% if c.makeupandh == wn.makeupandh %} style='color:{{ wincolor }}'{% endif %}>{{ c.makeupandh}}</td>
+            <td>
+            {% if c.makeupandh == wn.makeupandh %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Music (Original Score)</th>
+            <td>{{ wn.mscore }}</td>
+      {% for c in commentz %}
+            <td {% if c.mscore == wn.mscore %} style='color:{{ wincolor }}'{% endif %}>{{ c.mscore }}</td>
+            <td>
+            {% if c.mscore == wn.mscore %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Music (Original Song)</th>
+            <td>{{ wn.msong }}</td>
+      {% for c in commentz %}
+            <td {% if c.msong == wn.msong %} style='color:{{ wincolor }}'{% endif %}>{{ c.msong }}</td>
+            <td>
+            {% if c.msong == wn.msong %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Production Design</th>
+            <td>{{ wn.prodesign }}</td>
+      {% for c in commentz %}
+            <td {% if c.prodesign == wn.prodesign %} style='color:{{ wincolor }}'{% endif %}>{{ c.prodesign }}</td>
+            <td>
+            {% if c.prodesign == wn.prodesign %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Animated Short</th>
+            <td>{{ wn.animatedshort }}</td>
+      {% for c in commentz %}
+            <td {% if c.animatedshort == wn.animatedshort %} style='color:{{ wincolor }}'{% endif %}>{{ c.animatedshort }}</td>
+            <td>
+            {% if c.animatedshort == wn.animatedshort %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Live Action Short</th>
+            <td>{{ wn.shortfilm }}</td>
+      {% for c in commentz %}
+            <td {% if c.shortfilm == wn.shortfilm %} style='color:{{ wincolor }}'{% endif %}>{{ c.shortfilm }}</td>
+            <td>
+            {% if c.shortfilm == wn.shortfilm %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Sound</th>
+            <td>{{ wn.sound }}</td>
+      {% for c in commentz %}
+            <td {% if c.sound == wn.sound %} style='color:{{ wincolor }}'{% endif %}>{{ c.sound }}</td>
+            <td>
+            {% if c.sound == wn.sound %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Visual Effects</th>
+            <td>{{ wn.visualfx }}</td>
+      {% for c in commentz %}
+            <td {% if c.visualfx == wn.visualfx %} style='color:{{ wincolor }}'{% endif %}>{{ c.visualfx }}</td>
+            <td>
+            {% if c.visualfx == wn.visualfx %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Writing (Adapted Screenplay)</th>
+            <td>{{ wn.writingad }}</td>
+      {% for c in commentz %}
+            <td {% if c.writingad == wn.writingad %} style='color:{{ wincolor }}'{% endif %}>{{ c.writingad }}</td>
+            <td>
+            {% if c.writingad == wn.writingad %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Writing (Original Screenplay)</th>
+            <td>{{ wn.writingor }}</td>
+      {% for c in commentz %}
+            <td {% if c.writingor == wn.writingor %} style='color:{{ wincolor }}'{% endif %}>{{ c.writingor }}</td>
+            <td>
+            {% if c.writingor == wn.writingor %}<p>+1</p>{% endif %}
+            </td>
+      {% endfor %}
+        </tr>
+        <tr>
+            <th>Total Score</th>
+            <th> </th>
+      {% for c in commentz %}
+            <th style='text-align: right'>Total: </th>
+            <th>{{ c.skore }}</th>
+      {% endfor %}
+        </tr>
+    </table>
+    </div>
+{% endblock %}

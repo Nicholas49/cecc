@@ -16,7 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from . import views
+
 urlpatterns = [
+    path('', views.mainview, name='mainview'),
     path('admin/', admin.site.urls),
-    path('cecc/', include('cecc.urls'))
+    path('cecc/', include('cecc.urls')),
+    path('oscars/', include('oscarsapp.urls')),
+    path('quizthing/', include('quizthing.urls')),
+    path('jeopardy/', include('jeopardy.urls'))
 ]

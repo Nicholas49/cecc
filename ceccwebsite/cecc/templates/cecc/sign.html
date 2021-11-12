@@ -1,42 +1,170 @@
+{% extends 'cecc/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>Sign the Guest Book</title>
+{% block content %}
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'cecc/bootstrap.min.css' %}" rel="stylesheet">
+        <br>
+        <center>
+            <h1 class="form-signin-heading" style="color: #ffffff">Edit the Menu</h1>
+        </center>
+        <form method="POST" action="{% url 'addmenu' %}">
+            <table class="vis">
+                <tr>
+                    <th style="border-radius: 15px;">
+                        {% csrf_token %}
+                        <div>
+                            <h2>Season</h2>
+                            {{ form.season }}
+                        </div>
+                    </th><th>
+                        <div>
+                            <h2>Week</h2>
+                        {{ form.week }}
+                        </div>
+                    </th><th>
+                        <div class="form-group">
+                            <h2>Day</h2>
+                            {{ form.weekday }}
+                        </div>
+                    </th>
+                </tr><tr style='background-color: #adf; color: white'>
+                    <td>
+                        <div>
+                            <label for="breakfast" class="sr-only">Breakfast</label>
+                            {{ form.breakfast }}
+                        </div>
+                    </td><td>
+                        <div>
+                            <label for="lunch" class="sr-only">Lunch</label>
+                            {{ form.lunch }}
+                        </div>
+                    </td><td>
+                        <div>
+                            <label for="snack" class="sr-only">Snack</label>
+                            {{ form.snack }}
+                        </div>
+                    </td>
+                </tr><tr>
+                    <td colspan="3">
+                        <input type="hidden" name="passwordf" value="{{ password }}">
+                        <center>
+                            <button type="submit" class="btn btn-primary" style="width: 70%; border-radius: 15px">Add</button>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </form>
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'cecc/sign.css' %}" rel="stylesheet">
-  </head>
 
-  <body>
+        <br>
 
-    <div class="container">
-      
-      <form class="form-signin" method="POST" action="{% url 'sign' %}">
-        {% csrf_token %}
-        <h2 class="form-signin-heading">Sign the Guest Book</h2>
-        <div class="form-group">
-          <label for="inputName" class="sr-only">Name</label>
-          {{ form.name }}
+        <div class="tab" style="border-radius: 15px 15px 0px 0px;">
+            <button class="tabbutton active" onclick="changetab(event, 'sprsum')">Spring/Summer</button>
+            <button class="tabbutton" onclick="changetab(event, 'summer')">Summer</button>
+            <button class="tabbutton" onclick="changetab(event, 'autumn')">Autumn</button>
         </div>
-        <div class="form-group">
-          <label for="comment" class="sr-only">Comment:</label>
-            {{ form.comment }}
+
+        <div class="tabcontent" id="sprsum" style="display: block; border-radius: 0px 0px 15px 15px">
+
+        {% for w in seasons.BSSM %}
+
+        <table id="calendert">
+            <tr>
+                <th class="NWCorner">Week {{ w.weekno }}</th>
+                {% for c in w.daylist %}
+                    <th valign="top" {% if forloop.revcounter == 1 %}class="NECorner"{% endif %}>
+                        {% if c.weekday == "AMON" %}Monday{% endif %}
+                        {% if c.weekday == "BTUE" %}Tuesday{% endif %}
+                        {% if c.weekday == "CWED" %}Wednesday{% endif %}
+                        {% if c.weekday == "DTHU" %}Thursday{% endif %}
+                        {% if c.weekday == "EFRI" %}Friday{% endif %}
+                    </th>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey">Breakfast</th>
+                {% for c in w.daylist %}
+                    <td>{{ c.breakfast }}</td>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey">Lunch</th>
+                {% for c in w.daylist %}
+                    <td>{{ c.lunch }}</td>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey">Snack</th>
+                {% for c in w.daylist %}
+                    <td>{{ c.snack }}</td>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey SWCorner"></th>
+                {% for c in w.daylist %}
+                    <td>
+                        <form method="POST" action="{% url 'delmenu' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="menu_id" value="{{ c.id }}">
+                            <input type="hidden" name="passwordf" value="{{ password }}">
+                            <button type="submit" class="btn btn-warning" style="border-radius: 15px;">Delete</button>
+                        </form>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+        <p> </p>
+
+        {% endfor %}
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign</button>
-      </form>
 
-    </div> <!-- /container -->
+        <div class="tabcontent" id="summer">
 
-  </body>
-</html>
+            {% for w in seasons.CSUM %}
+
+                <table id="calendert">
+                    <tr>
+                        <th class="NWCorner">Week {{ w.weekno }}</th>
+                            {% for c in w.daylist %}
+                                <th valign="top" {% if forloop.revcounter == 1 %}class="NECorner"{% endif %}>
+                                    {% if c.weekday == "AMON" %}Monday{% endif %}
+                                    {% if c.weekday == "BTUE" %}Tuesday{% endif %}
+                                    {% if c.weekday == "CWED" %}Wednesday{% endif %}
+                                    {% if c.weekday == "DTHU" %}Thursday{% endif %}
+                                    {% if c.weekday == "EFRI" %}Friday{% endif %}
+                                </th>
+                            {% endfor %}
+                    </tr><tr>
+                        <th class="calkey">Breakfast</th>
+                        {% for c in w.daylist %}
+                            <td>{{ c.breakfast }}</td>
+                        {% endfor %}
+                    </tr><tr>
+                        <th class="calkey">Lunch</th>
+                        {% for c in w.daylist %}
+                            <td>{{ c.lunch }}</td>
+                        {% endfor %}
+                    </tr><tr>
+                        <th class="calkey SWCorner">Snack</th>
+                        {% for c in w.daylist %}
+                            <td>{{ c.snack }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+                <p> </p>
+
+            {% endfor %}
+        </div>
+
+        <div class="tabcontent" id="autumn">
+
+            <h2>MRDC Summer Menu</h2>
+
+            <p></p>
+        </div>
+        <p> </p>
+ <!-- /container -->
+
+<style>
+div#rightpane {
+    display: none
+}
+</style>
+
+{% endblock %}

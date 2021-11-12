@@ -1,0 +1,107 @@
+{% extends 'cecc/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div id="leftcontent">
+
+    <div class="tab" style="border-radius: 15px 15px 0px 0px;">
+        <button class="tabbutton NWCorner active" onclick="changetab(event, 'sprsum')">Spring/Summer</button>
+        <button class="tabbutton" onclick="changetab(event, 'summer')">Summer</button>
+        <button class="tabbutton" onclick="changetab(event, 'autumn')">Autumn</button>
+    </div>
+
+    <div class="tabcontent" id="sprsum" style="display: block; border-radius: 0px 0px 15px 15px;">
+        <h2 class="ttext"> MRDC Spring/Summer Menu</h2>
+        <p><strong> *subject to change at any time</strong></p>
+
+        {% for w in seasons.BSSM %}
+
+        <table id="calendert">
+            <tr>
+                <th class="NWCorner">Week {{ w.weekno }}</th>
+                {% for c in w.daylist %}
+                    <th valign="top" {% if forloop.revcounter == 1 %}class="NECorner"{% endif %}>
+                        {% if c.weekday == "AMON" %}Monday{% endif %}
+                        {% if c.weekday == "BTUE" %}Tuesday{% endif %}
+                        {% if c.weekday == "CWED" %}Wednesday{% endif %}
+                        {% if c.weekday == "DTHU" %}Thursday{% endif %}
+                        {% if c.weekday == "EFRI" %}Friday{% endif %}
+                    </th>
+                {% endfor %}
+                </tr><tr>
+                    <th class="calkey">Breakfast</th>
+                    {% for c in w.daylist %}
+                        <td>{{ c.breakfast }}</td>
+                    {% endfor %}
+                </tr><tr>
+                    <th class="calkey">Lunch</th>
+                    {% for c in w.daylist %}
+                        <td>{{ c.lunch }}</td>
+                    {% endfor %}
+                </tr><tr>
+                    <th class="calkey SWCorner">Snack</th>
+                    {% for c in w.daylist %}
+                        <td {% if forloop.revcounter == 1 %}class="SECorner"{% endif %}>{{ c.snack }}</td>
+                    {% endfor %}
+                </tr>
+        </table>
+        <p> </p>
+
+        {% endfor %}
+    </div>
+
+    <div class="tabcontent" id="summer" style="border-radius: 0px 0px 15px 15px;">
+        <h2 class="ttext"> MRDC Summer Menu</h2>
+        <p><strong> *subject to change at any time</strong></p>
+
+        {% for w in seasons.CSUM %}
+
+        <table id="calendert">
+            <tr>
+                <th class="NWCorner">Week {{ w.weekno }}</th>
+                {% for c in w.daylist %}
+                    <th valign="top" {% if forloop.revcounter == 1 %}Class="NECorner"{% endif %}>
+                        {% if c.weekday == "AMON" %}Monday{% endif %}
+                        {% if c.weekday == "BTUE" %}Tuesday{% endif %}
+                        {% if c.weekday == "CWED" %}Wednesday{% endif %}
+                        {% if c.weekday == "DTHU" %}Thursday{% endif %}
+                        {% if c.weekday == "EFRI" %}Friday{% endif %}
+                    </th>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey">Breakfast</th>
+                {% for c in w.daylist %}
+                    <td>{{ c.breakfast }}</td>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey">Lunch</th>
+                {% for c in w.daylist %}
+                    <td>{{ c.lunch }}</td>
+                {% endfor %}
+            </tr><tr>
+                <th class="calkey SWCorner">Snack</th>
+                {% for c in w.daylist %}
+                    <td {% if forloop.revcounter == 1 %}class="SECorner"{% endif %}>{{ c.snack }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+        <p> </p>
+
+        {% endfor %}
+    </div>
+
+    <div class="tabcontent" id="autumn" style="border-radius: 0px 0px 15px 15px;">
+
+        <h2>MRDC Summer Menu</h2>
+
+        <p>*menu subject to change</p>
+    </div>
+
+    <a type="button" class="btn btn-link" href="{% url 'sign' %}">Add Menu</a>
+
+    <p> </p>
+    <p>You can <a href="/contact-us">Schedule a Tour</a> online or call us anytime between 6:00am - 6:30pm.&nbsp; We look forward to hearing from you!</p>
+</div>
+
+{% endblock %}

@@ -1,45 +1,124 @@
+{% extends 'cecc/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <title>Guest Book</title>
+{% block content %}
+<div class="imgwall">
+    <div class="toptitle" style="padding-top: 15px">
+        <div></div>
+        <h1 style="color: #ffdd00"><strong>Children's Montessori</strong></h1>
+        <h2><strong>Pre-School <span style="font-size: 0.8em">&</span> Daycare Centers</strong></h2>
+        <h2><strong>Since 1886</strong></h2>
+    </div>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'cecc/bootstrap.min.css' %}" rel="stylesheet"> 
-    <!-- Bootstrap theme -->
-    <link href="{% static 'cecc/bootstrap-theme.min.css' %}" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'guestbook/theme.css' %}" rel="stylesheet">
 
-  </head>
+    <div id="demo" class="carousel slide" data-ride="carousel"
+        style="position: fixed; z-index: -1; width: 100%; max-width: 1000px; top: 240px; left: 50%; z-index: 0; transform: translate(-50%, 0%);">
 
-  <body>
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+            <li data-target="#demo" data-slide-to="3"></li>
+            <li data-target="#demo" data-slide-to="4"></li>
+            <li data-target="#demo" data-slide-to="5"></li>
+            <li data-target="#demo" data-slide-to="6"></li>
+            <li data-target="#demo" data-slide-to="7"></li>
+        </ul>
 
-    <div class="container theme-showcase" role="main">
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'ceccimages/rotator/rotator-kids-music.jpg' %}" alt="children playing musical instruments">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'ceccimages/rotator/pool-pic.jpg' %}" alt="Children in pool">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'ceccimages/rotator/kids-animals.jpg' %}" alt="Children playing with animals">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'ceccimages/rotator/Edu-Care-Tree.jpg' %}" alt="Edu-Care Tree">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'ceccimages/rotator/rotator-infant-care.jpg' %}" alt="Infants">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'ceccimages/rotator/rotator-computer-kids.jpg' %}" alt="children using computer">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'ceccimages/rotator/pony-ride.jpg' %}" alt="Pony Ride">
+            </div>
+        </div>
 
-      <div class="jumbotron">
-        <h1>Guest Book</h1>
-        <a type="button" class="btn btn-link" href="{% url 'sign' %}">Sign the Guest Book</a>
-      </div>
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
 
-      {% for c in comments %}
-      <div class="page-header">
-        <h1>{{ c.name }}</h1>
-      </div>
-      <div class="well">
-        <p>{{ c.comment }}</p>
-      </div>
-      {% endfor %}
+</div>
+    <!-- If you need to hide the gallery during the edit mode delete '&& false' -->
 
-    </div> <!-- /container -->
+<div style="position: relative;">
+    <div class="section" style="background-color: #ccccff; position: relative; padding: 10px; z-index: 1;">
+        <div>
+            <p> </p>
+            <h1 style="color: #4466ff"><strong>Programs for Young Children</strong></h1>
+            <p style='font-size: 20px'>Children's Edu-Care centers offer full and part time infant, toddler, and pre-school programs and school age daycare Monday through Friday, 6:00am to 6:30pm.  Mid Rivers Day Care offers a large indoor playground and Children's Edu-Care Center is located on a beautiful 3 acre campus with an in-ground pool designed for children.</p>
+        </div>
+        <div style='font-size: 20px;'>
+            <p>We offer two child care centers in the Mid Rivers Mall Drive area and both are within two miles of Interstate 70 and four miles of Missouri Highway 94.</p>
+            <p> </p>
+        </div>
+    </div>
 
-  </body>
-</html>
+    <div class="section" style="background-color: #ffffff;">
+        <div>
+            <p> </p>
+            <h4 style="color: #2222dd;"><strong>We offer the following pre-school and daycare programs led by degreed, experienced teachers: </strong></h4>
+            <p> </p>
+        </div>
+    </div>
+
+    <div class="section" style="background-color: #88ccff;">
+
+        <div>
+
+            <img src="{% static 'ceccimages/center-educare.png' %}" title="Contact Children's Edu-Care Center" alt="Children's Edu-Care Center" style="border-radius: 15px; float: left; margin: 20px;"/>
+            <p> </p>
+            <h2><strong>Mid Rivers Day Care  6:00am - 6:30pm</strong></h2>
+            <h3>Cuddle Care</h3>
+            <p>Personal, caring attention <strong>infant through two years</strong></p>
+            <h3>Kinder-Prep</h3>
+            <p>Traditional pre-school and PreK <strong>three through six years</strong></p>
+        </div>
+        <div>
+
+            <img src="{% static 'ceccimages/center-daycare.png' %}" title="Contact Mid Rivers Day Care" alt="Mid Rivers Day Care" style="border-radius: 15px; float: left; margin: 20px;"/>
+            <h2><strong>Children's Edu-Care Center  6:00am - 6:30pm</strong></h2>
+            <h3>The Academy</h3>
+            <p><strong>Montessori</strong> primary school <strong>two and a half through six years</strong></p>
+            <h3><strong>Kindergarten</strong></h3>
+            <p>Preparing for elementary <strong>five through six years</strong></p>
+            <h3><strong>Kountry Klub</strong></h3>
+            <p>Before/after school, day off daycare <strong>six through twelve years</strong></p>
+            <h3><strong>Kountry Kamp</strong></h3>
+            <p>Summer camp <strong>six through twelve years</strong></p>
+        </div>
+    </div>
+
+    <div class="section" style="color: #222222; background-color: #ffffff;">
+        <div>
+            <p> </p>
+            <p>You can <a href="/contact-us">Schedule a Tour</a> online or call us anytime between 6:00am - 6:30pm.  We look forward to hearing from you!</p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Jeopardy Game">
+    <meta name="author" content="01as">
+
+    <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
+    <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <link href="//db.onlinewebfonts.com/c/598f92f2bbb58a544a174b7c145ca599?family=ITC+Korinna+Std" rel="stylesheet" type="text/css"/>
+    <link href="//db.onlinewebfonts.com/c/266e4c01b92d0ac2707aa145f839e9bb?family=Swiss911W01-Compressed" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
+
+    <title>{{ winner }} Wins</title>
+
+</head>
+<body>
+
+    <center>
+        <h1 style='color: #ffbb00; margin: 1vw'>Winner</h1>
+        <h1 style='margin: 1vw'>Team {{ winner }}: ${{ topscore }}</h1>
+
+        {% if winner == 'Chomsky' %}
+            <img src="{% static 'ceccimages/jeopardy/chomsky_win.jpg' %}">
+        {% endif %}
+        {% if winner == 'Delilah' %}
+            <img src="{% static 'ceccimages/jeopardy/delilah_win.jpg' %}">
+        {% endif %}
+        {% if winner == 'Leia' %}
+            <img src="{% static 'ceccimages/jeopardy/leia_win.jpg' %}">
+        {% endif %}
+    </center>
+
+    <h4 style='position: absolute; top: 10px; right: 10px; margin: 0px; background-color: #000066; padding: 10px; border-radius: 10px'>
+        <a href='http://01as.pythonanywhere.com/jeopardy/reset/{{ game_name }}'>Reset</a>
+    </h4>
+
+
+        <ul class='scorebar'>
+            {% for t in teams %}
+                <li>
+                    <span style='font-size: 1.2em; color: #ffdd00'>Team {{ t.teamno }}</span><br>
+                    <strong>{{ t.teamname }}:</strong> ${{ t.points }}
+                </li>
+            {% endfor %}
+        </ul>
+
+
+</body>
+</html>
