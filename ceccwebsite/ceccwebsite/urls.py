@@ -24,5 +24,6 @@ urlpatterns = [
     path('cecc/', include('cecc.urls')),
     path('oscars/', include('oscarsapp.urls')),
     path('quizthing/', include('quizthing.urls')),
-    path('jeopardy/', include('jeopardy.urls'))
+    path('jeopardy/', include('jeopardy.urls')),
+    path('familyfeud/', include('familyfeud.urls'))
 ]

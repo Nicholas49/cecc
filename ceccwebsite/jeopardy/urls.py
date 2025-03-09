@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.menu, name='menu'),
+    path('old_menu', views.old_menu, name='old_menu'),
     path('play', views.board, name='board'),
     path('play/<str:game_name>', views.board, name='board'),
     path('double/<str:game_name>', views.board2, name='board2'),
@@ -30,5 +31,7 @@ urlpatterns = [
     path('shiftup', views.shiftup, name='shiftup'),
     path('shiftdown', views.shiftdown, name='shiftdown'),
     path('shiftright', views.shiftright, name='shiftright'),
+    path('new_game/<str:game_name>/<str:creator>', views.new_game, name='new_game'),
+    path('gen_games', views.gen_games, name='gen_games'),
     path('hello', views.hello, name='hello')
 ]

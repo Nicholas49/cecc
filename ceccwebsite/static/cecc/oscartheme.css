@@ -32,16 +32,16 @@ h1 {
 /* Navigation Stuff */
 
 .nav {
-    margin: 0px auto;
+    margin: auto;
     table-layout: fixed;
-    width: 100vmin;
+    width: 96vw;
     text-align: center;
 }
 
 .tab a div {
     width: 60%;
     margin: auto;
-    font-size: 3vmin;
+    font-size: 3vw;
     border-bottom: 4px solid #282828;
     color: #fff;
 }
@@ -206,6 +206,7 @@ h1 {
     /*width: 200px;*/
     color: #B7A261;
     font-size: 2.5em;
+    padding: 0.3em;
 }
 
 .postertab1 {
@@ -259,7 +260,7 @@ h1 {
 }
 
 .radiolist li {
-    width: 35%;
+    width: 32%;
     max-width: 300px;
     display: inline-block;
     text-align: center;
@@ -271,6 +272,7 @@ h1 {
     width: 96%;
     border: 2% solid #222222;
     padding-bottom: 10px;
+    overflow: hidden;
 }
 
 .radiolist div:hover {
@@ -320,9 +322,21 @@ h1 {
 }
 
 .kulr {
+    -webkit-appearance: none;
+    border: none;
     width: 60px;
     height: 60px;
 }
+
+
+.kulr::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.kulr::-webkit-color-swatch {
+    border: none;
+}
+
 
 .showbutton{
     width: 30px;
@@ -351,5 +365,67 @@ h1 {
 
 #side_nav a:hover {
     color: #0000aa;
+}
+
+.newname {
+    font-size: 2.5em;
+    color: #B7A261;
+    background-color: #333;
+    text-align: center;
+    border: 0px;
+    width: 500px;
+    max-width: 90vw;
+    transition: background-color 1s;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #B7A261;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #B7A261;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
 }
 

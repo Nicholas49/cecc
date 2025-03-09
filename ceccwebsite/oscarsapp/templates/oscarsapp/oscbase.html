@@ -32,28 +32,29 @@
             </div>
 
             {% if logged_in %}
-            <a type="button" href="{% block logout %}../logout_user{% endblock %}" style='position: absolute;
+            <a type="button" href="{% url 'logout_user' version %}" style='position: absolute;
                         top: 5px;
                         right: 5px;
                         color: #b7a261;
                         padding: 5px;
-                        text-decoration: underline'>Logout {{ name }}</a>
+                        font-size: min(2.5vw, 25px);
+                        text-decoration: underline'>Logout {{ user }}</a>
             {% endif %}
 
             <table class='nav'>
                 <tr>
                     <td class="tab">
-                        <a type="button" href="https://01as.pythonanywhere.com/oscars/{{ urlz.0 }}/">
+                        <a type="button" href="https://01as.pythonanywhere.com/oscars/{{ version }}/chart">
                             <div id='alnk'>Full Chart</div>
                         </a>
                     </td>
                     <td class="tab">
-                        <a type="button" href="https://01as.pythonanywhere.com/oscars/{{ urlz.1 }}/">
+                        <a type="button" href="https://01as.pythonanywhere.com/oscars/{{ version }}/front">
                             <div id='blnk'>Oscar Scores</div>
                         </a>
                     </td>
                     <td class="tab">
-                        <a type="button" href="https://01as.pythonanywhere.com/oscars/{{ urlz.2 }}/">
+                        <a type="button" href="https://01as.pythonanywhere.com/oscars/{{ version }}/loadballot">
                             <div id="clnk">Ballot</div>
                         </a>
                     </td>

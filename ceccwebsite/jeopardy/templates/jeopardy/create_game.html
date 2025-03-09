@@ -44,7 +44,7 @@
                 <tr class='shift_arrows'>
                     <th style='width: 0px;'>
                         <form method='GET' action='../shiftright' onsubmit="disableb()" style='transform: translate(0%)'>
-
+                            {% csrf_token %}
                             <input type='hidden' name='game_name' value='{{ game_name }}'>
                             <input type='hidden' name='category' value='cat12'>
                             <input type='hidden' name='jround'  value='single'>
@@ -55,7 +55,7 @@
                     {% for cl in catlist %}
                         <th>
                             <form method='GET' action='../shiftup' onsubmit="disableb()" style='width:4vw'>
-
+                                {% csrf_token %}
                                 <input type='hidden' name='game_name' value='{{ game_name }}'>
                                 <input type='hidden' name='category' value='{{ cl }}'>
                                 <input type='hidden' name='jround'  value='single'>
@@ -63,7 +63,7 @@
                                 <button type='submit'>&#8686;</button>
                             </form>
                             <form method='GET' action='../shiftright' onsubmit="disableb()" style='position: absolute; transform: translate({% if not forloop.counter == 6 %}240{% else %}180{% endif %}%)'>
-
+                                {% csrf_token %}
                                 <input type='hidden' name='game_name' value='{{ game_name }}'>
                                 <input type='hidden' name='category' value='{{ cl }}'>
                                 <input type='hidden' name='jround'  value='single'>
@@ -71,7 +71,7 @@
                                 <button type='submit'>&#8644;</button>
                             </form>
                             <form method='GET' action='../shiftdown' onsubmit="disableb()" style='width:4vw'>
-
+                                {% csrf_token %}
                                 <input type='hidden' name='game_name' value='{{ game_name }}'>
                                 <input type='hidden' name='category' value='{{ cl }}'>
                                 <input type='hidden' name='jround'  value='single'>

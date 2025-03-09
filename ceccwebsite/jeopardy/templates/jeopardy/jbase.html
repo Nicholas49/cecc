@@ -10,6 +10,7 @@
     <meta name="author" content="01as">
     <link href="{% static 'cecc/jeopardytheme.css' %}" rel="stylesheet">
     <script src="{% static 'cecc/jeopardyfunctions.js' %}"></script>
+    <script src="{% static 'jscript/jquery-3.6.3.min.js' %}"></script>
     <link href="//db.onlinewebfonts.com/c/266e4c01b92d0ac2707aa145f839e9bb?family=Swiss911W01-Compressed" rel="stylesheet" type="text/css"/>
     <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
 
@@ -19,12 +20,11 @@
     <body>
 
         <a href='../reset/{{ game_name }}'>
-            <h4 style='position: absolute; top: 0.5vw; right: 0.5vw; margin: 0.5vw; background-color: #000066; padding: 1vw; border-radius: 1vw'>
-            Reset</h4>
+            <h4 class='link_button' style='position: absolute; top: 0.5vw; right: 0.5vw'>Reset</h4>
         </a>
 
         <a href='https://01as.pythonanywhere.com/jeopardy'>
-            <h4 style='position: absolute; top: 0.5vw; right: 9vw; margin: 0.5vw; background-color: #000066; padding: 1vw; border-radius: 1vw'>Home</h4>
+            <h4 class='link_button' style='position: absolute; top: 0.5vw; right: 9vw'>Home</h4>
         </a>
 
         {% block content %}

@@ -1,0 +1,83 @@
+{% extends 'oscarsapp/oscbase.html' %}
+{% load static %}
+{% block title %}Enter Your Picks{% endblock %}
+{% block styles %}
+    #clnk {
+{% endblock %}
+{% block content %}
+
+
+<div class="container">
+
+    <span style="background-color: #B7A261; padding: 5px 10px; font-size: 30px; cursor: pointer; position: sticky; top: 0px;" onclick="openNav()">Nav</span>
+
+    <div id='side_nav' style='text-align: center; position: fixed; z-index: 1; top: 0px; width: 200px; height: 100%; background-color: #B7A261; transform: translate(-100%, 0%); padding: 10px; left: 0px; transition: 0.5s'>
+        <span href="javascript:void(0)" class="closebtn" onclick="closeNav()" style='font-size: 30px; cursor: pointer; position: absolute; top: 0; right: 10px;'>&times;</span>
+
+        <a href='#top'>Top</a><br>
+        {% for c in cats %}
+            <a href='#{{ c.shortname }}'>{{ c.name }}</a><br>
+        {% endfor %}
+    </div>
+
+    <form class="form-signin" method="POST" action="{% url 'submit_winners' %}" onclick="closeNav()">
+        {% csrf_token %}
+
+        {% for c in cats %}
+
+            <div class="form-group">
+                <hr style='transform: translate(0px, 33px); z-index: -1; position: relative; width: 80vw; background-color: #B7A261'>
+                <label for="comment" class="sr-only" id='{{ c.shortname }}' style='background-color: #222; line-height: 1.2'>{{ c.name }} ({{ c.points }}pts)</label>
+
+                <ul class="radiolist">
+                    {% for n in c.nomination_set.all %}
+                        <li><label>
+                            <input type="radio" name="{{ c.shortname }}"
+                                value="{{ n.nominee.name }}" class="horlist1"
+                                placeholder="{{ c.shortname }}pik"
+                                id="id_{{ c.shortname }}_{{ forloop.counter0 }}"
+                                {% if c.winner == n %}checked{% endif %}>
+                            <div>
+                                <img width="100%" src="{{ n.nominee.image.url }}">
+                                <span>{{ n.nominee.name }}</span><br>
+                                {% if c.shortname != 'best_pic' %}
+                                    {% autoescape off %}
+                                        {{ n.subtitle }}
+                                    {% endautoescape %}
+                                {% endif %}
+                            </div>
+                        </label></li>
+                    {% endfor %}
+
+                    <li><label>
+                        <input type="radio" name="{{ c.shortname }}"
+                            value="TBD" class="horlist1"
+                            placeholder="{{ c.shortname }}pik"
+                            id="id_{{ c.shortname }}_{{ forloop.counter0 }}"
+                            {% if c.winner is null %}checked{% endif %}>
+                        <div>
+                            <img width="100%" src="/media/poster/x.png">
+                            <span>Remove</span>
+                        </div>
+                    </label></li>
+                </ul>
+            </div>
+
+        {% endfor %}
+
+        <button type="submit" value="Submit" class="submitbutton">Submit Ballot</button><br>
+    </form>
+    <div style="height: 20vmin"></div>
+
+</div> <!-- /container -->
+
+<script>
+    function openNav() {
+      document.getElementById("side_nav").style.transform = "translate(0%, 0%)";
+    }
+
+    function closeNav() {
+      document.getElementById("side_nav").style.transform = "translate(-100%, 0%)";
+    }
+</script>
+{% endblock %}

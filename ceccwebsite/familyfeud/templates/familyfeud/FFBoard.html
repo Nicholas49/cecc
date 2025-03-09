@@ -1,0 +1,419 @@
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<style>
+    body{
+	  font-family: sans-serif;
+        background-color: black;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .head {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .answerContainer {
+        display: flex;
+        flex-flow: column wrap;
+        background-color: #002;
+        height: 70vh;
+        width: 100%;
+        max-width: 100vh;
+        margin: auto;
+    }
+
+    .answer {
+        color: white;
+        width: 10vw;
+        background-color: red;
+        text-align: center;
+    }
+
+    .points {
+        position: absolute;
+        left: 50%;
+        color: white;
+        background-color: #23f;
+        width: 20vmin;
+        transform: translate(-50%, 0%);
+        font-size: 3vmin;
+        border-radius: 0 0 2vw 2vw;
+        text-align: center;
+    }
+
+    .score {
+        font-size: 3vmin;
+        color: white;
+        background-color: green;
+        width: 20vmin;
+        border-radius: 0 0 2vmin 2vmin;
+    }
+
+    .score input {
+        width: 10vmin;
+        background-color: transparent;
+        color: white;
+        border: none;
+        font-size: 3vmin;
+    }
+
+    .flip-box {
+        background-color: transparent;
+        width: 48%;
+        height: 22%;
+        perspective: 500px; /* Remove this if you don't want the 3D effect */
+        margin: 1% 1%;
+    }
+
+    /* This container is needed to position the front and back side */
+    .flip-box-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    /* Position the front and back side */
+    .flip-box-front, .flip-box-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden; /* Safari */
+        backface-visibility: hidden;
+        border-radius: 2vh;
+    }
+
+    /* Style the front side */
+    .flip-box-front {
+        background-color: #25e;
+        color: white;
+        font-size: 4vh;
+    }
+
+    /* Style the back side */
+    .flip-box-back {
+        background-color: dodgerblue;
+        color: white;
+        transform: rotatex(180deg);
+        font-size: 2.5vh;
+        text-transform: uppercase;
+    }
+
+    .strikes {
+        color: red;
+        text-align: center;
+        font-size: 3vh;
+        text-transform: uppercase;
+    }
+
+    .strikeButton {
+        position: relative;
+        color: white;
+        background-color: red;
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+    }
+
+    .strikeButton span {
+        font-size: 200%;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        transform: translate(0%, -50%);
+        width: 100%;
+    }
+
+    .resetButton {
+        font-size: 1vh%;
+        background-color: #082;
+        color: white;
+        border-radius: 4vh;
+        padding: 2vh;
+    }
+
+    .showAnswer {
+        transform: rotateX(180deg);
+    }
+
+    .makered {
+        background-color: red;
+    }
+
+    .nextButton {
+        font-size: 1vh%;
+        background-color: #555;
+        color: white;
+        border-radius: 4vh;
+        padding: 2vh;       
+    }
+
+    .invisibleButton {
+        font-size: 1vh%;
+        background-color: #000;
+        color: 000;
+        border-radius: 4vh;
+        padding: 2vh;       
+    }
+
+    .question {
+        color: transparent;
+        background-color: navy;
+        text-align: center;
+        width: 80vw;
+        max-width: 100vh;
+        margin: 1vmin auto;
+        border-radius: 3vmin;
+        font-size: 3vmin;
+        padding: 1vmin;
+    }
+
+    .showText {
+        color: #fff;
+    }
+
+    .bigRedX {
+        position: absolute;
+        top: -50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 90vh;
+        animation-name: brx;
+        animation-duration: 1s;
+}
+
+    @keyframes brx {
+        0%   {top: -50%; color: transparent;}
+        1%   {top: 50%; color: transparent;}
+        2%   {top: 50%; color: red;}
+        99%  {top: 50%; color: transparent;}
+        100% {top: -50%; color: transparent;}
+}
+    
+</style>
+
+<div id="app">
+    <div class="head">
+        <div class="points">{{ points }}</div>
+        <div v-for="(team, index) in teams" class="score" v-on:click="win" :id="index">
+            <span><input type='text'>: {{ team.score }}</span>
+        </div>
+    </div>
+
+    <div class="strikes"><span v-for="strike in strikes">X</span></div>
+    <div class="strikes"><span v-if="strikes >= 3">Chance To Steal</span></div>
+
+    <div v-for="(q, qno) in questions" v-if="qno == round" class="question" v-on:click="question" :id="'q' + round">{{ q.text }}</div>
+
+    <div v-for="(rnd, rndno) in rounds" v-if="rndno == round" class="answerContainer">
+        <div v-for="(answer, answerno) in rnd" class="flip-box" v-on:click="add">
+            <input type="hidden" :value="answer.points" :id="answerno">
+            <div class="flip-box-inner" :id="'fb' + answerno ">
+                <div class="flip-box-front">
+                    <h2>{{ answerno + 1 }}</h2>
+                </div>
+                <div class="flip-box-back">
+                    <h2>{{ answer.answer }}: {{ answer.points }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <div v-on:click="lastRound" class="nextButton" v-if="round > 1"> Round {{ round - 1 }} << </div>
+        <div class="invisibleButton" v-if="round < 2"> Round 0 << </div>
+        <div class="strikeButton" v-on:click="strike">
+            <span>X</span>
+        </div>
+        <div v-on:click="reset" class="resetButton">Reset</div>
+        <div v-on:click="nextRound" class="nextButton"> >> Round {{ round + 1 }}</div>
+    </div>
+    <span id="brx">X</span>
+</div>
+
+<script>
+    const vue = new Vue({
+        el: '#app',
+        data: {
+            points: 0,
+		round: 1,
+            teams: [
+                {name: 'Lauers', score: 0},
+                {name: 'Farrells', score: 0}
+            ],
+            strikes: 0,
+            questions: [
+                    {text: "This is a test round", hid: true},
+			  {text: "Name a well-known character who is green", hid: true},
+                    {text: "Name a sport in which you might fall off something", hid: true},
+                    {text: "Santa Claus is hoping to get a new what for Christmas?", hid: true},
+                    {text: "Other than a gun, name something you aim", hid: true},
+                    {text: "Name the most important piece of furniture in your house", hid: true},
+                    {text: "When is the worst day to break up with your partner", hid: true},
+                    {text: "Name a place where a child might love to have their birthday party", hid: true},
+                    {text: "Name a vegetable that begins with the letter B", hid: true},
+                    {text: "Name something the laziest person in the world might put next to their bed so they can roll over and use it", hid: true}
+                ],
+		rounds: [
+                [],
+		    [
+                    {answer: 'Kermit', points: '32', hid: true},
+                	  {answer: 'Incredible hulk', points: '17', hid: true},
+                	  {answer: 'Gumby', points: '13', hid: true},
+                	  {answer: 'Shrek', points: '9', hid: true},
+                	  {answer: 'The Grinch', points: '8', hid: true},
+                	  {answer: 'Jolly Green Giant', points: '8', hid: true}
+		    ],
+                [
+                    {answer: 'Horseback riding', points: '49', hid: true},
+                    {answer: 'Cycling', points: '8', hid: true},
+                    {answer: 'Diving', points: '8', hid: true},
+                    {answer: 'Skiing', points: '6', hid: true},
+                    {answer: 'Bull Riding', points: '5', hid: true},
+                    {answer: 'Gymnastics', points: '5', hid: true},
+                    {answer: 'Skating', points: '5', hid: true},
+                    {answer: 'Climbing', points: '3', hid: true},
+                ],
+                [
+                    {answer: 'Sleigh', points: '42', hid: true},
+                    {answer: 'Suit', points: '41', hid: true},
+                    {answer: 'Job', points: '4', hid: true},
+                    {answer: 'Reindeer', points: '3', hid: true}
+                ],
+                [
+                    {answer: 'Bow and Arrow', points: '64', hid: true},
+                    {answer: 'Dart', points: '11', hid: true},
+                    {answer: 'Camera', points: '5', hid: true},
+                    {answer: 'Finger', points: '4', hid: true},
+                    {answer: 'Hose', points: '4', hid: true},
+                ],
+                [
+                    {answer: 'Bed', points: '43', hid: true},
+                    {answer: 'Couch', points: '22', hid: true},
+                    {answer: 'Chair', points: '12', hid: true},
+                    {answer: 'TV', points: '10', hid: true},
+                    {answer: 'Dining Table', points: '5', hid: true},
+                ],
+                [
+                    {answer: 'Valentines Day', points: '64', hid: true},
+                    {answer: 'Birthday', points: '11', hid: true},
+                    {answer: 'Wedding Day', points: '7', hid: true},
+                    {answer: 'Anniversary', points: '7', hid: true},
+                    {answer: 'Christmas', points: '3', hid: true},
+                    {answer: 'Weekend', points: '3', hid: true}
+                ],
+                [
+                    {answer: 'Chuck-E-Cheese', points: '47', hid: true},
+                    {answer: 'Amusement Park', points: '13', hid: true},
+                    {answer: 'Fast Food', points: '10', hid: true},
+                    {answer: 'Home', points: '10', hid: true},
+                    {answer: 'Beach', points: '6', hid: true},
+                    {answer: 'Zoo', points: '5', hid: true},
+                    {answer: 'Park', points: '3', hid: true}
+                ],
+                [
+                    {answer: 'Broccoli', points: '55', hid: true},
+                    {answer: 'Brussels Sprouts', points: '37', hid: true},
+                    {answer: 'Beans', points: '6', hid: true},
+                    {answer: 'Butternut Squash', points: '2', hid: true}
+                ],
+                [
+                    {answer: 'Remote control', points: '34', hid: true},
+                    {answer: 'Toilet', points: '28', hid: true},
+                    {answer: 'Fridge', points: '9', hid: true},
+                    {answer: 'Phone', points: '7', hid: true},
+                    {answer: 'Microwave', points: '3', hid: true}
+                ]
+		]
+        },
+        methods: {
+            strike() {
+                if (this.strikes < 3){
+
+                    var brx = document.getElementById("brx").classList;
+                    this.strikes += 1;
+                    if (brx.contains("bigRedX")){
+                        brx.remove("bigRedX");
+                        document.getElementById("brx").offsetWidth;
+                    }
+                    brx.add("bigRedX");
+                }
+            },
+            reset() {
+            	this.strikes = 0;
+            },
+            add(event) {
+                var inp = event.target.parentElement.previousElementSibling;
+                if (this.rounds[this.round][inp.id]['hid']){
+                    event.target.parentElement.classList.toggle('showAnswer');
+                    this.points += parseInt(inp.value);
+                    this.rounds[this.round][inp.id]['hid'] = false;
+                }
+            },
+            addKey(event) {
+
+                let num = parseInt(event.key) - 1;
+                if (this.rounds[this.round][num]['hid']){
+                    document.getElementById('fb' + num).classList.toggle('showAnswer');
+                    this.points += parseInt(this.rounds[this.round][num]['points']);
+                    this.rounds[this.round][num]['hid'] = false;
+                }
+            },
+            win(event) {
+                this.teams[parseInt(event.target.id)]['score'] += this.points;
+                this.points = 0;
+            },
+            winKey(num) {
+                this.teams[num]['score'] += this.points;
+                this.points = 0;
+            },
+            question(event) {
+                event.target.classList.toggle("showText");
+            },
+            questionKey() {
+                document.getElementById("q" + this.round).classList.toggle("showText");
+            },
+            lastRound(event) {
+                this.round -= 1;
+                this.strikes = 0;
+                this.points = 0;
+            },
+            nextRound(event) {
+                this.round += 1;
+                this.strikes = 0;
+                this.points = 0;
+            }
+        },
+	  mounted() {
+            let self = this;
+            window.addEventListener('keyup', function(ev){
+                if ("1234567890".includes(ev.key)){
+                    self.addKey(ev);
+                }
+		    if (ev.key == 'x'){
+                    self.strike();
+                }
+                if (ev.key == ' '){
+                    self.questionKey();
+                }
+                if (ev.key == 'ArrowRight'){
+                    self.nextRound(ev);
+                }
+                if (ev.key == 'ArrowLeft'){
+                    self.lastRound(ev);
+                }
+                if (ev.key == 'r'){
+                    self.reset();
+                }
+                if (ev.key == 'q'){
+                    self.winKey(0);
+                }
+                if (ev.key == 'w'){
+                    self.winKey(1);
+                }
+
+		});
+	  }
+    })
+</script>

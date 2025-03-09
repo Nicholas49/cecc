@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .models import jeopardyboard, CategoryTitle, finaljeopardy, team, wizard
+from .models import jeopardyboard, CategoryTitle, finaljeopardy, team, wizard, game
 
 
 def board(request, game_name='default'):
@@ -60,15 +60,19 @@ def showanswer2(request, game_name='default', jcat='cat1', dollar='800', turn=1)
     isdouble = False
 
     answers = jeopardyboard.objects.filter(game=game_name)
-    cat = CategoryTitle.objects.get(game=game_name, category=jcat)
+    cat = CategoryTitle.objects.filter(game=game_name, category=jcat)
     teams = team.objects.order_by('teamno')
+
+    catname = 'none'
+    if len(cat) != 0:
+        catname = cat[0].catname
 
     for a in answers:
         if a.category == jcat and a.dollar == dollar:
             jround = a.jround
             janswer = a.answer
             jquestion = a.question
-            jcatname = cat.catname
+            jcatname = catname
             jdollar = a.dollar
             isdouble = a.isdouble
 
@@ -197,10 +201,13 @@ def make_game(request):
     for a in answers:
         if a.category == request.POST['category'] and a.dollar == request.POST['dollar']:
             isnew = False
-            a.answer = answ
-            a.question = request.POST['question']
-            a.isdouble = dd
-            a.save()
+            if answ == '' and ques == '' and dd == False:
+                a.delete()
+            else:
+                a.answer = answ
+                a.question = request.POST['question']
+                a.isdouble = dd
+                a.save()
 
     if isnew:
         newboard = jeopardyboard(game=gname,
@@ -277,6 +284,18 @@ def make_final(request):
         newfinal.save()
 
     return redirect('edit_gamef', game_name=gname)
+
+
+def new_game(request, game_name='default', creator='John Doe'):
+
+    games = game.objects.all()
+    for g in games:
+        if g.gname == game_name:
+            return redirect('menu2')
+
+    new_game = game(gname=game_name, creator=creator)
+    new_game.save()
+    return redirect('edit_game', game_name=game_name)
 
 
 def edit_game(request, game_name='default'):
@@ -398,7 +417,7 @@ def editteam(request):
         return redirect('board2', game_name=request.GET['gname'])
 
 
-def menu(request):
+def old_menu(request):
 
     answers = jeopardyboard.objects.all()
     ranswers = reversed(answers)
@@ -424,6 +443,15 @@ def menu(request):
     return render(request, 'jeopardy/menu.html', context)
 
 
+def menu(request):
+
+    games = game.objects.all()
+
+    context = {'games': games}
+
+    return render(request, 'jeopardy/menu2.html', context)
+
+
 def delete_game(request, game_name='foo'):
 
 #    answers = jeopardyboard.objects.filter(game=game_name)
@@ -444,6 +472,7 @@ def change_name(request):
     newname = request.POST['newname']
     jround = request.POST['jround']
 
+    jgame = game.objects.get(gname=oldname)
     answers = jeopardyboard.objects.filter(game=oldname)
     cats = CategoryTitle.objects.filter(game=oldname)
     final = finaljeopardy.objects.filter(game=oldname)
@@ -459,6 +488,9 @@ def change_name(request):
     for f in final:
         f.game = newname
         f.save()
+
+    jgame.gname = newname
+    jgame.save()
 
     if jround == 'single':
         return redirect('edit_game', game_name=newname)
@@ -644,6 +676,28 @@ def shiftright(request):
         return redirect('edit_game2', game_name=gname)
     else:
         return redirect('edit_gamef', game_name=gname)
+
+
+def gen_games(request):
+
+    answers = jeopardyboard.objects.all()
+
+    already_made = []
+
+    for a in answers:
+        if a.game in already_made:
+            continue
+        else:
+            already_made.append(a.game)
+
+    hr = ''
+    for al in already_made:
+        newgame = game(gname = al,
+            creator = '')
+        newgame.save()
+
+    return HttpResponse(hr)
+
 
 
 def hello(request):

@@ -74,14 +74,14 @@
     <h4 style='color: #880000; text-align: center' id='error'>{{ error }}</h4>
 
     <div class='boundary'>
-        <div id='signup' class="showbox">
+        <div id='signup' class="showbox {% if code != '' %}expanded{% endif %}">
             <h3 onclick="expand('signup', 'expanded')" style='cursor: pointer; width: 100%'>Sign Up</h3>
 
-            <form class="form-signin" method="POST" action="../create_user/" id='cform'>
+            <form class="form-signin" method="POST" action="{% url 'create_user' version %}" id='cform'>
                 {% csrf_token %}
                 <center>
-                    <input type='password' name='code' class='inputfield' placeholder='Access Code' required></input><br>
-                    <input type='text' name='username' class='inputfield' placeholder='Username' required></input><br>
+                    <input type='password' name='code' class='inputfield' placeholder='Access Code' value='{{ code }}' required></input><br>
+                    <input type='text' name='username' class='inputfield' placeholder='Name' required {% if code != '' %}autofocus{% endif %}></input><br>
                     <input type='password' name='password' class='inputfield' placeholder='Password' id='pass1' required onkeyup='checklength()'></input><br>
                     <input type='password' name='repassword' class='inputfield' placeholder='Retype Password' id='pass2' required onkeyup='checkmatch()'></input><br>
                     <button type='submit' class='submitbutton'>Submit</button>
@@ -93,10 +93,10 @@
             <div onclick="expand('login', 'expanded2')" style='cursor: pointer;'>
                 <h3>Log In</h3>
             </div>
-            <form class="form-signin" method="POST" action="../login_user">
+            <form class="form-signin" method="POST" action="{% url 'login_user' version %}">
                 {% csrf_token %}
                 <center>
-                    <input type='text' name='username' class='inputfield' placeholder='Username' required></input><br>
+                    <input type='text' name='username' class='inputfield' placeholder='Name' required></input><br>
                     <input type='password' name='password' class='inputfield' placeholder='Password' required></input><br>
                     <button type='submit' class='submitbutton'>Submit</button>
                 </center>

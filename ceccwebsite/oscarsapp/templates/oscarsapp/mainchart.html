@@ -3,29 +3,29 @@
 
 {% block title %}Oscar Scores{% endblock %}
 
-    <!-- Custom styles for this template -->
-    {% block stylelinks %}<link href="{% static 'cecc/oscartheme.css' %}" rel="stylesheet">{% endblock %}
+<!-- Custom styles for this template -->
+{% block stylelinks %}<link href="{% static 'cecc/oscartheme.css' %}" rel="stylesheet">{% endblock %}
 
     {% block styles %}
-        {% for c in commentz %}
+        {% for b in ballots %}
         #idx{{ forloop.counter }} th{
-            background-color: {{ c.kulr }};
+            background-color: {{ b.kulr }};
         }
 
         #idy{{ forloop.counter }}:hover {
-            background-color: {{ c.kulr }};
+            background-color: {{ b.kulr }};
         }
 
         #idy{{ forloop.counter }}.active {
-            background-color: {{ c.kulr }};
+            background-color: {{ b.kulr }};
         }
 
         {% endfor %}
 
         #blnk {
-    {% endblock %}
+{% endblock %}
 
-    {% block scripts %}
+{% block scripts %}
     <style>
         body{
             overflow-x: hidden;
@@ -70,20 +70,20 @@
 
         }
     </script>
-    {% endblock %}
+{% endblock %}
 
-    {% block logout %}logout_user{% endblock %}
+{% block logout %}logout_user{% endblock %}
 
-    {% block content %}
+{% block content %}
     <div style='position: absolute; width: 100vw; overflow: hidden;height: 89.6vh; white-space: nowrap'>
     <table class='maintable'>
-        {% for c in commentz %}
+        {% for b in ballots %}
         <tr id='idy{{ forloop.counter }}' class='buttonrow'>
             <td style="font-size: 3.7vmin; width: 4vw; text-align: center">
-                {{ c.place }}<span style="font-size: 1.7vmin"
-                    >{% if c.place == 1 %}st
-                    {% elif c.place == 2 %}nd
-                    {% elif c.place == 3 %}rd
+                {{ b.place }}<span style="font-size: 1.7vmin"
+                    >{% if b.place == 1 %}st
+                    {% elif b.place == 2 %}nd
+                    {% elif b.place == 3 %}rd
                     {% else %}th
                     {% endif %}
                 </span>
@@ -91,196 +91,50 @@
             <td style="text-align: right">
                 <div class='buttondiv' onclick='showtable(event, "idx{{ forloop.counter }}")'>
                     <div>
-                    {{ c.name }}
+                    {{ b.name }}
                     </div>
                 </div>
             </td>
         </tr>
         {% endfor %}
     </table><table class='maintable' style='width: 76vw;' id="chart">
-      {% for c in commentz %}
+      {% for b in ballots %}
         <tr>
             <td>
-                <div style='width:{{ c.vwidth }}%;
+                <div style='width:{{ b.vwidth }}%;
                             position: relative;
                             height: 100%;
-                            background-color:{{ c.kulr }}'>
-                    <p class='scoretext'>{% if c.skore != 0 %}{{ c.skore }}{% endif %}</p>
-                    </div>
+                            background-color:{{ b.kulr }}'>
+                    <p class='scoretext'>{% if b.skore != 0 %}{{ b.skore }}{% endif %}</p>
+                </div>
             </td>
         </tr>
         {% endfor %}
     </table>
 
-    {% for c in commentz %}
+    {% for b in ballots %}
     <table class='otable' id="idx{{ forloop.counter }}">
-        <tr class='toprow'>
-            <th>Category</th>
-            <th>Choice</th>
-            <th>Winner</th>
-            <th style='width: 10%'></th>
-        </tr><tr>
-            <th>Best Picture</th>
-            <td>{{ c.bestpicture }}</td>
-            <td>{{ winnerz.bestpicture }}</td>
-            <td>
-            {% if c.bestpicture == winnerz.bestpicture %}+3{% endif %}
-            </td>
-        </tr><tr>
-            <th>Lead Actor</th>
-            <td>{{ c.actor }}</td>
-            <td>{{ winnerz.actor }}</td>
-            <td>
-            {% if c.actor == winnerz.actor %}+3{% endif %}
-            </td>
-        </tr><tr>
-            <th>Lead Actress</th>
-            <td>{{ c.actress }}</td>
-            <td>{{ winnerz.actress }}</td>
-            <td>
-            {% if c.actress == winnerz.actress %}+3{% endif %}
-            </td>
-        </tr><tr>
-            <th>Supporting Actor</th>
-            <td>{{ c.supactor }}</td>
-            <td>{{ winnerz.supactor }}</td>
-            <td>
-            {% if c.supactor == winnerz.supactor %}+2{% endif %}
-            </td>
-        </tr><tr>
-            <th>Supporting Actress</th>
-            <td>{{ c.supactress }}</td>
-            <td>{{ winnerz.supactress }}</td>
-            <td>
-            {% if c.supactress == winnerz.supactress %}+2{% endif %}
-            </td>
-        </tr><tr>
-            <th>Animated Feature</th>
-            <td>{{ c.animatedfeature }}</td>
-            <td>{{ winnerz.animatedfeature }}</td>
-            <td>
-            {% if c.animatedfeature == winnerz.animatedfeature %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Cinematography</th>
-            <td>{{ c.cinematography }}</td>
-            <td>{{ winnerz.cinematography }}</td>
-            <td>
-            {% if c.cinematography == winnerz.cinematography %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Costume Design</th>
-            <td>{{ c.costume }}</td>
-            <td>{{ winnerz.costume }}</td>
-            <td>
-            {% if c.costume == winnerz.costume %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Directing</th>
-            <td>{{ c.directing }}</td>
-            <td>{{ winnerz.directing }}</td>
-            <td>
-            {% if c.directing == winnerz.directing %}+2{% endif %}
-            </td>
-        </tr><tr>
-            <th>Documentary</th>
-            <td>{{ c.documentary }}</td>
-            <td>{{ winnerz.documentary }}</td>
-            <td>
-            {% if c.documentary == winnerz.documentary %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Documentary Short</th>
-            <td>{{ c.docshort }}</td>
-            <td>{{ winnerz.docshort }}</td>
-            <td>
-            {% if c.docshort == winnerz.docshort %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Film Editing</th>
-            <td>{{ c.fediting }}</td>
-            <td>{{ winnerz.fediting }}</td>
-            <td>
-            {% if c.fediting == winnerz.fediting %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Foreign Language</th>
-            <td>{{ c.foreign }}</td>
-            <td>{{ winnerz.foreign }}</td>
-            <td>
-            {% if c.foreign == winnerz.foreign %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Makeup and Hairstyling</th>
-            <td>{{ c.makeupandh }}</td>
-            <td>{{ winnerz.makeupandh }}</td>
-            <td>
-            {% if c.makeupandh == winnerz.makeupandh %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Original Score</th>
-            <td>{{ c.mscore }}</td>
-            <td>{{ winnerz.mscore }}</td>
-            <td>
-            {% if c.mscore == winnerz.mscore %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Original Song</th>
-            <td>{{ c.msong }}</td>
-            <td>{{ winnerz.msong }}</td>
-            <td>
-            {% if c.msong == winnerz.msong %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Production Design</th>
-            <td>{{ c.prodesign }}</td>
-            <td>{{ winnerz.prodesign }}</td>
-            <td>
-            {% if c.prodesign == winnerz.prodesign %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Animated Short</th>
-            <td>{{ c.animatedshort }}</td>
-            <td>{{ winnerz.animatedshort }}</td>
-            <td>
-            {% if c.animatedshort == winnerz.animatedshort %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Live Action Short</th>
-            <td>{{ c.shortfilm }}</td>
-            <td>{{ winnerz.shortfilm }}</td>
-            <td>
-            {% if c.shortfilm == winnerz.shortfilm %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Sound</th>
-            <td>{{ c.sound }}</td>
-            <td>{{ winnerz.sound }}</td>
-            <td>
-            {% if c.sound == winnerz.sound %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Visual Effects</th>
-            <td>{{ c.visualfx }}</td>
-            <td>{{ winnerz.visualfx }}</td>
-            <td>
-            {% if c.visualfx == winnerz.visualfx %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Adapted Screenplay</th>
-            <td>{{ c.writingad }}</td>
-            <td>{{ winnerz.writingad }}</td>
-            <td>
-            {% if c.writingad == winnerz.writingad %}+1{% endif %}
-            </td>
-        </tr><tr>
-            <th>Original Screenplay</th>
-            <td>{{ c.writingor }}</td>
-            <td>{{ winnerz.writingor }}</td>
-            <td>
-            {% if c.writingor == winnerz.writingor %}+1{% endif %}
-            </td>
-        </tr>
+        <thead>
+            <tr class='toprow'>
+                <th>Category</th>
+                <th>Choice</th>
+                <th>Winner</th>
+                <th style='width: 10%'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in b.pick_set.all|dictsort:"nomination.category.order" %}
+            <tr>
+                <th>{{ p.nomination.category.name }}</th>
+                <td>
+                    {% if not b.hidden or b.user == user or not wizard.active %}{{ p.nomination.nominee.name }}{% endif %}
+                    {% if b.hidden and wizard.active %}<b>SECRET</b>{% endif %}
+                </td>
+                <td>{{ p.nomination.category.winner.nominee.name }}</td>
+                <td>{% if p.nomination == p.nomination.category.winner %}+{{ p.nomination.category.points }}{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     {% endfor %}
     <div style='background-color: #222; width: 50vw; height: 89vh; position: absolute; right: -50vw; top: 0px; transition: right 1s'></div>
@@ -288,4 +142,4 @@
 
 
     </div> <!-- /container -->
-    {% endblock %}
+{% endblock %}

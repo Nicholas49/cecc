@@ -60,7 +60,8 @@ function deletegame(gname) {
 
 function creategame() {
     var gname = document.getElementById('newname').value;
-    window.location.assign("https://01as.pythonanywhere.com/jeopardy/create_game/" + gname);
+    var creator = document.getElementById('newcreator').value;
+    window.location.assign("https://01as.pythonanywhere.com/jeopardy/new_game/" + gname + "/" + creator);
 }
 
 

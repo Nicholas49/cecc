@@ -1,149 +1,98 @@
 from django.shortcuts import render, redirect
 
 from django.contrib.auth.decorators import login_required
-from .models import Winners, oscarballot, umslballot
+from .models import Wizard, Ballot, Category, Nomination, Pick
 from .forms import OscarBallot, Passwordform
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from oscarsapp.data import oscurls, umslurls
 
+import logging
 import hashlib
-import math
 
-oscurls = ['chart', '', 'loadballot']
-umslurls = ['umsl/chart', 'umsl', 'umsl/loadballot']
+logger = logging.getLogger(__name__)
 
-def base(text,
-         alfin="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ',./=-;<>?+_:!@#$%^&*()[]{}`~|",
-         alfout="0123456789abcdef"):
-    return tostring(toint(text, alfin), alfout)
+urlz = {
+    "lauer": oscurls,
+    "umsystem": umslurls
+}
 
 
-def toint(stri, alf):
-    # takes in a string of characters and then, using the supplied alphabet, interprets the
-    # string as a number with a base the size of the alphabet, each character representing a digit.
-    # It then converts this number to a base 10 representation and returns it as an integer.
+def front(request, version):
 
-    numblist = tonumblist(stri, alf)
+    calculate_scores()
 
-    total = 0
+    user = 'none'
+    logged_in = False
 
-    alflen = len(alf)
-    count = len(numblist) - 1
-    for numb in numblist:
-        total += int(numb) * (alflen ** count)
-        count -= 1
-
-    return total
+    if request.user.is_authenticated:
+        user = request.user.username
+        logged_in = True
 
 
-def tostring(numb, alf):
-    # The inverse of toint, this function takes in an integer and converts it into a
-    # a 'base x' representation in the form of a string where x is the number of
-    # characters in the provided alphabet
+    ballots = Ballot.objects.filter(game=version).order_by('-skore')
 
-    count = 0
-    outstring = ""
+    place = 1
+    for count, ballot in enumerate(ballots):
+        if count != 0:
+            if ballot.skore != ballots[count - 1].skore:
+                place += 1
+        ballot.place = place
+        ballot.save()
 
-    alflen = len(alf)
+    ballots = Ballot.objects.filter(game=version).order_by('-skore')
+    categories = Category.objects.order_by('order')
 
-    while numb >= (alflen ** count):
-        count += 1
-    count -= 1
+    context = {
+        'ballots' : ballots,
+        'categories': categories,
+        'version' : version,
+        'user': user,
+        'logged_in': logged_in,
+        'wizard': Wizard.objects.get()
+    }
 
-    while count >= 0:
-        powr = alflen ** count
-        digi = math.floor(numb / powr)
-        outstring += alf[digi]
-        numb %= powr
-        count -= 1
-
-    return outstring
-
-
-def tonumblist(text, alf3):
-    # Converts a string of characters into a list of integers based on their position in the supplied alphabet
-
-    numbi = []
-
-    for x in text:
-        for y in range(len(alf3)):
-            if x == alf3[y]:
-                numbi.append(y)
-                break
-
-    return numbi
+    return render(request, 'oscarsapp/mainchart.html', context)
 
 
-def calculatescore(n, w):
-    n.skore = 0
-    if n.bestpicture == w.bestpicture:
-        n.skore += 3
-    if n.actor == w.actor:
-        n.skore += 3
-    if n.actress == w.actress:
-        n.skore += 3
-    if n.supactor == w.supactor:
-        n.skore += 2
-    if n.supactress == w.supactress:
-        n.skore += 2
-    if n.animatedfeature == w.animatedfeature:
-        n.skore += 1
-    if n.cinematography == w.cinematography:
-        n.skore += 1
-    if n.costume == w.costume:
-        n.skore += 1
-    if n.directing == w.directing:
-        n.skore += 2
-    if n.documentary == w.documentary:
-        n.skore += 1
-    if n.docshort == w.docshort:
-        n.skore += 1
-    if n.fediting == w.fediting:
-        n.skore += 1
-    if n.foreign == w.foreign:
-        n.skore += 1
-    if n.makeupandh == w.makeupandh:
-        n.skore += 1
-    if n.mscore == w.mscore:
-        n.skore += 1
-    if n.msong == w.msong:
-        n.skore += 1
-    if n.prodesign == w.prodesign:
-        n.skore += 1
-    if n.animatedshort == w.animatedshort:
-        n.skore += 1
-    if n.shortfilm == w.shortfilm:
-        n.skore += 1
-    if n.sound == w.sound:
-        n.skore += 1
-    if n.visualfx == w.visualfx:
-        n.skore += 1
-    if n.writingad == w.writingad:
-        n.skore += 1
-    if n.writingor == w.writingor:
-        n.skore += 1
-    n.vwidth = n.skore * 3
-    n.save()
+def calculatescore(ballot):
+    ballot.skore = 0
+
+    for category in Category.objects.all():
+        pick = ballot.pick_set.filter(nomination__category=category)
+        if pick and pick[0].nomination == category.winner:
+            ballot.skore += category.points
+
+    ballot.vwidth = ballot.skore * 3
+    ballot.save()
 
 
-def create_user(request):
+def calculate_scores():
+    for ballot in Ballot.objects.order_by('-skore'):
+        calculatescore(ballot)
+
+
+def create_user(request, version):
     code = request.POST['code']
     username = request.POST['username']
     password = request.POST['password']
     password2 = request.POST['repassword']
 
+    wizard = Wizard.objects.get()
+
     if not password == password2:
-        return redirect('passpage', error='Passwords Do Not Match')
+        return redirect("passpage", version=version, error='Passwords Do Not Match')
 
-    hp = hashlib.sha256(base(code).encode()).hexdigest()
+    hp = hashlib.sha256(code.encode()).hexdigest()
+    hash = wizard.lauer_hash if version == "lauer" else wizard.umsl_hash
 
-    if not hp == '6eeb012caae507c80b6055868c5af63c61fdacee9cdc24097f23dfcb49d5d392':
-        return redirect('passpage', error='Incorrect Access Code')
+    if not hp == hash:
+        return redirect('passpage', version=version, code=code, error='Incorrect Access Code')
 
     users = User.objects.order_by('username')
     for u in users:
         if username == u.username:
-            return redirect('passpage', error='user already exists')
+            return redirect('passpage', version=version, error='user already exists', code=code)
 
     newuser = User.objects.create_user(username, password=password)
     newuser.save()
@@ -151,38 +100,10 @@ def create_user(request):
     user = authenticate(request, username=username, password=password)
 
     login(request, user)
-    return redirect('loadballot')
+    return redirect('loadballot', version=version)
 
 
-def ucreate_user(request):
-    code = request.POST['code']
-    username = request.POST['username']
-    password = request.POST['password']
-    password2 = request.POST['repassword']
-
-    if not password == password2:
-        return redirect('upasspage', error='Passwords Do Not Match')
-
-    hp = hashlib.sha256(base(code).encode()).hexdigest()
-
-    if not hp == '6eeb012caae507c80b6055868c5af63c61fdacee9cdc24097f23dfcb49d5d392':
-        return redirect('upasspage', error='Incorrect Access Code')
-
-    users = User.objects.order_by('username')
-    for u in users:
-        if username == u.username:
-            return redirect('upasspage', error='user already exists')
-
-    newuser = User.objects.create_user(username, password=password)
-    newuser.save()
-
-    user = authenticate(request, username=username, password=password)
-
-    login(request, user)
-    return redirect('uloadballot')
-
-
-def login_user(request):
+def login_user(request, version):
     username = request.POST['username']
     password = request.POST['password']
 
@@ -190,363 +111,207 @@ def login_user(request):
 
     if thisuser is not None:
         login(request, thisuser)
-        return redirect('loadballot')
+        return redirect("loadballot", version=version)
     else:
-        return redirect('passpage', error='username or password is wrong')
+        return redirect("passpage", version=version, error='username or password is wrong')
 
 
-def ulogin_user(request):
-    username = request.POST['username']
-    password = request.POST['password']
+def passpage(request, version, error='', code=''):
 
-    thisuser = authenticate(request, username=username, password=password)
-
-    if thisuser is not None:
-        login(request, thisuser)
-        return redirect('uloadballot')
-    else:
-        return redirect('upasspage', error='username or password is wrong')
-
-
-def front(request):
-
-    name = 'none'
-    logged_in = False
-
-    if request.user.is_authenticated:
-        name = request.user.username
-        logged_in = True
-
-    commento = oscarballot.objects.order_by('-skore')
-    w = Winners.objects.get()
-
-    for n in commento:
-        calculatescore(n, w)
-
-    counter = 1
-    for n in range(len(commento)):
-        if not n == 0:
-            if not commento[n].skore == commento[n - 1].skore:
-                counter += 1
-        commento[n].place = counter
-
-    context = {'commentz' : commento, 'winnerz' : w, 'urlz' : oscurls, 'name': name, 'logged_in': logged_in}
-
-    return render(request, 'oscarsapp/mainchart.html', context)
-
-
-def ufront(request):
-
-    name = 'none'
-    logged_in = False
-
-    if request.user.is_authenticated:
-        name = request.user.username
-        logged_in = True
-
-    commento = umslballot.objects.order_by('-skore')
-    w = Winners.objects.get()
-
-    for n in commento:
-        calculatescore(n, w)
-
-    counter = 1
-    for n in range(len(commento)):
-        if not n == 0:
-            if not commento[n].skore == commento[n - 1].skore:
-                counter += 1
-        commento[n].place = counter
-
-    context = {'commentz' : commento, 'winnerz' : w, 'urlz' : umslurls, 'name': name, 'logged_in': logged_in}
-
-    return render(request, 'oscarsapp/mainchart.html', context)
-
-
-def passpage(request, error=''):
-
-#    error = hashlib.sha256(base('').encode()).hexdigest()
+    if error == 'none':
+        error = ''
 
     form = Passwordform()
-    context = {'form' : form, 'error': error, 'urlz' : oscurls}
+    context = {
+        'form' : form,
+        'error': error,
+        'code': code,
+        'version': version
+    }
     return render(request, 'oscarsapp/passpage.html', context)
 
 
-def upasspage(request, error=''):
-    form = Passwordform()
-    context = {'form' : form, 'error': error, 'urlz' : umslurls}
-    return render(request, 'oscarsapp/passpage.html', context)
-
-
-def loadballot(request):
-
-    w = Winners.objects.get()
-
-    if w.active == True:
+def loadballot(request, version, code=''):
+    if Wizard.objects.get().active == True:
 
         if request.user.is_authenticated:
 
-            name = request.user.username
+            user = request.user.username
 
             hasballot = False
-            ballots = oscarballot.objects.order_by('-skore')
+            ballots = Ballot.objects.filter(game=version)
             ballot = 'none'
+            name = user
 
             for b in ballots:
-                if b.name == name:
+                if b.user == user:
                     hasballot = True
                     ballot = b
+                    name = ballot.name
 
             form = OscarBallot()
 
-            context = {'name': name, 'hasballot': hasballot, 'ballot': ballot, 'form' : form, 'urlz' : oscurls, 'logged_in': True}
+            categories = Category.objects.order_by('order')
+
+            context = {
+                'user': user,
+                'name': name,
+                'hasballot': hasballot,
+                'ballot': ballot,
+                'form' : form,
+                'version': version,
+                'logged_in': True,
+                'cats': categories
+            }
+
             return render(request, 'oscarsapp/fillballot.html', context)
 
         else:
-            return redirect('passpage')
+            if code:
+                return redirect("passpage", version=version, error='none', code=code)
+            return redirect("passpage", version=version)
 
     else:
-        return render(request, 'oscarsapp/inactive.html')
-
-
-def uloadballot(request):
-
-    w = Winners.objects.get()
-
-    if w.active == True:
-
-        if request.user.is_authenticated:
-
-            name = request.user.username
-
-            hasballot = False
-            ballots = umslballot.objects.order_by('-skore')
-            ballot = 'none'
-
-            for b in ballots:
-                if b.name == name:
-                    hasballot = True
-                    ballot = b
-
-            form = OscarBallot()
-
-            context = {'name': name, 'hasballot': hasballot, 'ballot': ballot, 'form' : form, 'urlz' : umslurls, 'logged_in': True}
-            return render(request, 'oscarsapp/fillballot.html', context)
-
-        else:
-            return redirect('upasspage')
-
-    else:
-
-        context = {'urlz': umslurls}
+        context = {'version': version}
         return render(request, 'oscarsapp/inactive.html', context)
 
 
-def submitballot(request):
+def winnerform(request):
+
+    user = request.user
+    if user.is_superuser:
+
+        context = {'user': user, 'cats': Category.objects.order_by('order')}
+        return render(request, 'oscarsapp/winnerform.html', context)
+
+    else:
+        return redirect(
+            "passpage",
+            version="lauer",
+            error="Must be admin to access"
+        )
+
+
+def submit_winners(request):
+
+    user = request.user
+    if user.is_superuser:
+
+        for c in Category.objects.order_by('order'):
+            if c.shortname in request.POST:
+                if request.POST[c.shortname] == "TBD":
+                    c.winner = None
+                    c.save()
+                else:
+                    c.winner = Nomination.objects.get(category=c, nominee__name=request.POST[c.shortname])
+                    c.save()
+
+        context = {'user': user, 'cats': Category.objects.order_by('order')}
+        return render(request, 'oscarsapp/winnerform.html', context)
+
+    else:
+        return redirect(
+            "passpage",
+            version="lauer",
+            error="Must be admin to access"
+        )
+
+
+def submitballot(request, version):
     form = OscarBallot(request.POST)
 
     if form.is_valid():
 
-        foundb = False
+        ballots = Ballot.objects.filter(game=version)
+        hidden = True if 'hide_ballot' in request.POST else False
+        username = request.user.username
 
-        ballots = oscarballot.objects.order_by('-skore')
+        name = request.POST['name']
+        duplicate = False
+        for ballot in ballots:
+            if request.user.username != ballot.user and name == ballot.name:
+                duplicate = True
 
-        for b in ballots:
-            if b.name == request.user.username:
-                foundb = True
+        if duplicate:
+            for ballot in ballots:
+                if ballot.user == username:
+                    name = ballot.name
 
-                b.bestpicture=request.POST['bestpicture']
-                b.actor=request.POST['actor']
-                b.actress=request.POST['actress']
-                b.supactor=request.POST['supactor']
-                b.supactress=request.POST['supactress']
-                b.animatedfeature=request.POST['animatedfeature']
-                b.cinematography=request.POST['cinematography']
-                b.costume=request.POST['costume']
-                b.directing=request.POST['directing']
-                b.documentary=request.POST['documentary']
-                b.docshort=request.POST['docshort']
-                b.fediting=request.POST['fediting']
-                b.foreign=request.POST['foreign']
-                b.makeupandh=request.POST['makeupandh']
-                b.mscore=request.POST['mscore']
-                b.msong=request.POST['msong']
-                b.prodesign=request.POST['prodesign']
-                b.animatedshort=request.POST['animatedshort']
-                b.shortfilm=request.POST['shortfilm']
-                b.sound=request.POST['sound']
-                b.visualfx=request.POST['visualfx']
-                b.writingad=request.POST['writingad']
-                b.writingor=request.POST['writingor']
-                b.kulr=request.POST['kulr']
-                b.save()
+        ballot = None
+        for bal in ballots:
+            if bal.user == username:
+                ballot = bal
 
-        if not foundb:
 
-            new_ballot = oscarballot(name=request.POST['name'],
-                bestpicture=request.POST['bestpicture'],
-                actor=request.POST['actor'],
-                actress=request.POST['actress'],
-                supactor=request.POST['supactor'],
-                supactress=request.POST['supactress'],
-                animatedfeature=request.POST['animatedfeature'],
-                cinematography=request.POST['cinematography'],
-                costume=request.POST['costume'],
-                directing=request.POST['directing'],
-                documentary=request.POST['documentary'],
-                docshort=request.POST['docshort'],
-                fediting=request.POST['fediting'],
-                foreign=request.POST['foreign'],
-                makeupandh=request.POST['makeupandh'],
-                mscore=request.POST['mscore'],
-                msong=request.POST['msong'],
-                prodesign=request.POST['prodesign'],
-                animatedshort=request.POST['animatedshort'],
-                shortfilm=request.POST['shortfilm'],
-                sound=request.POST['sound'],
-                visualfx=request.POST['visualfx'],
-                writingad=request.POST['writingad'],
-                writingor=request.POST['writingor'],
-                kulr=request.POST['kulr'])
-            new_ballot.save()
+        if ballot:
+            ballot.name=name
+            ballot.game=request.POST['version']
+            ballot.kulr=request.POST['kulr']
+            ballot.hidden=hidden
+            ballot.save()
 
-        return redirect('front')
+            for pick in ballot.pick_set.all():
+                shortname = pick.nomination.category.shortname
+                if shortname in request.POST:
+                    pick.nomination = Nomination.objects.get(category__shortname=shortname, nominee__name=request.POST[shortname])
+                    pick.save()
+
+        else:
+            ballot = Ballot(
+                user=username,
+                game=request.POST['version'],
+                name=name,
+                kulr=request.POST['kulr'],
+                hidden=hidden
+            )
+
+            ballot.save()
+
+            categories = Category.objects.all()
+            for c in categories:
+                shortname = c.shortname
+                if shortname in request.POST:
+                    nom = Nomination.objects.get(category__shortname=shortname, nominee__name=request.POST[shortname])
+                    pick = Pick(ballot=ballot, nomination=nom)
+                    pick.save()
+
+        return redirect('front', version=version)
 
     else:
-
-        return redirect('passpage')
-
-
-def usubmitballot(request):
-    form = OscarBallot(request.POST)
-
-    if form.is_valid():
-        foundb = False
-
-        ballots = umslballot.objects.order_by('-skore')
-
-        for b in ballots:
-            if b.name == request.user.username:
-                foundb = True
-
-                b.bestpicture=request.POST['bestpicture']
-                b.actor=request.POST['actor']
-                b.actress=request.POST['actress']
-                b.supactor=request.POST['supactor']
-                b.supactress=request.POST['supactress']
-                b.animatedfeature=request.POST['animatedfeature']
-                b.cinematography=request.POST['cinematography']
-                b.costume=request.POST['costume']
-                b.directing=request.POST['directing']
-                b.documentary=request.POST['documentary']
-                b.docshort=request.POST['docshort']
-                b.fediting=request.POST['fediting']
-                b.foreign=request.POST['foreign']
-                b.makeupandh=request.POST['makeupandh']
-                b.mscore=request.POST['mscore']
-                b.msong=request.POST['msong']
-                b.prodesign=request.POST['prodesign']
-                b.animatedshort=request.POST['animatedshort']
-                b.shortfilm=request.POST['shortfilm']
-                b.sound=request.POST['sound']
-                b.visualfx=request.POST['visualfx']
-                b.writingad=request.POST['writingad']
-                b.writingor=request.POST['writingor']
-                b.kulr=request.POST['kulr']
-                b.save()
-
-        if not foundb:
-
-            new_ballot = umslballot(name=request.POST['name'],
-                bestpicture=request.POST['bestpicture'],
-                actor=request.POST['actor'],
-                actress=request.POST['actress'],
-                supactor=request.POST['supactor'],
-                supactress=request.POST['supactress'],
-                animatedfeature=request.POST['animatedfeature'],
-                cinematography=request.POST['cinematography'],
-                costume=request.POST['costume'],
-                directing=request.POST['directing'],
-                documentary=request.POST['documentary'],
-                docshort=request.POST['docshort'],
-                fediting=request.POST['fediting'],
-                foreign=request.POST['foreign'],
-                makeupandh=request.POST['makeupandh'],
-                mscore=request.POST['mscore'],
-                msong=request.POST['msong'],
-                prodesign=request.POST['prodesign'],
-                animatedshort=request.POST['animatedshort'],
-                shortfilm=request.POST['shortfilm'],
-                sound=request.POST['sound'],
-                visualfx=request.POST['visualfx'],
-                writingad=request.POST['writingad'],
-                writingor=request.POST['writingor'],
-                kulr=request.POST['kulr'])
-            new_ballot.save()
-
-        return redirect('ufront')
-
-    else:
-
-        return redirect('upasspage', error='Form Is Invalid')
+        return redirect('passpage', version=version, error=form.errors)
 
 
-def chart(request):
-
-    name = 'none'
+def chart(request, version):
+    calculate_scores()
+    user = 'none'
     logged_in = False
 
     if request.user.is_authenticated:
-        name = request.user.username
+        user = request.user.username
         logged_in = True
 
-    commento = oscarballot.objects.order_by('-date_added')
-    w = Winners.objects.get()
-
-    for n in commento:
-        calculatescore(n, w)
-
-    context = {'commentz' : commento, 'wn': w, 'wincolor': '#B7A261', 'urlz' : oscurls, 'name': name, 'logged_in': logged_in}
+    context = {
+        'categories': Category.objects.order_by('order'),
+        'ballots': Ballot.objects.filter(game=version).order_by('-skore'),
+        'wincolor': '#B7A261',
+        'version': version,
+        'user': user,
+        'logged_in': logged_in,
+        'wizard': Wizard.objects.get()
+    }
     return render(request, 'oscarsapp/bigchart.html', context)
 
 
-def uchart(request):
-
-    name = 'none'
-    logged_in = False
-
-    if request.user.is_authenticated:
-        name = request.user.username
-        logged_in = True
-
-    commento = umslballot.objects.order_by('-date_added')
-    w = Winners.objects.get()
-
-    for n in commento:
-        calculatescore(n, w)
-
-    context = {'commentz' : commento, 'wn': w, 'wincolor': '#B7A261', 'urlz' : umslurls, 'name': name, 'logged_in': logged_in}
-    return render(request, 'oscarsapp/bigchart.html', context)
-
-
-def mychart(request):
-    comm = request.GET.get('person')
-    w = Winners.objects.get()
-
-    context = {'c' : comm, 'wn': w}
-    return render(request, '../../oscarsapp/templates/mychart.html', context)
+def showhash(request, text):
+    return render(
+        request,
+        'oscarsapp/showhash.html',
+        {'hash': hashlib.sha256(text.encode()).hexdigest()}
+    )
 
 
 @login_required
-def logout_user(request):
+def logout_user(request, version):
 
     logout(request)
-    return redirect('front')
-
-
-@login_required
-def ulogout_user(request):
-
-    logout(request)
-    return redirect('ufront')
-
-
+    return redirect("front", version=version)

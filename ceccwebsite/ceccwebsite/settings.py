@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '_f@qm#_2)*+%uey9#+1bns0xdq0nd)lj3od0y84kawgt)k#l7p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['01as.pythonanywhere.com']
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'oscarsapp',
     'quizthing',
     'jeopardy',
+    'familyfeud',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +71,9 @@ TEMPLATES = [
         },
     },
 ]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = f"{BASE_DIR}/media"
 
 WSGI_APPLICATION = 'ceccwebsite.wsgi.application'
 
@@ -124,3 +128,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/home/01as/cecc/ceccwebsite/static'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY=None

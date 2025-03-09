@@ -12,8 +12,11 @@
     <link href="//db.onlinewebfonts.com/c/266e4c01b92d0ac2707aa145f839e9bb?family=Swiss911W01-Compressed" rel="stylesheet" type="text/css"/>
     <link rel="icon" href="{% static 'ceccimages/favicon.ico' %}">
 
-    <title>Jeopardy Home</title>
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="{% static 'jscript/jquery-3.6.3.min.js"></script>
 
+    <title>Jeopardy Home</title>
 
 
     <body>
@@ -23,7 +26,7 @@
         </div>
 
         <div class='topper'>
-            <table class='menu'>
+            <table class='menu' id='menu'>
                 <tr style='background-color: #000088;'>
                     <th colspan='3'>
                         <h1 style=' color: #ffbb00; padding: 0px; margin: 0px;'>Games</h1>
@@ -60,5 +63,12 @@
                 {% endfor %}
             </table>
         </div>
+
+
+        <script>
+            $(document).ready(function () {
+                $('#menu').DataTable();
+            });
+        </script>
     </body>
 </html>
